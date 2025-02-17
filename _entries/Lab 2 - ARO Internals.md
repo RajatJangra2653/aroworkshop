@@ -1148,7 +1148,7 @@ In this part we will create a Key Vault location to store the connection string 
    EOF
    ```
 
-<validation step="58614025-40b6-49fa-ac36-a00931c3dae0" />
+<validation step="053a3bb6-832f-4ca6-9a7a-195d58085f19" />
 
 #### Create a custom Security Context Constraint (SCC)
 

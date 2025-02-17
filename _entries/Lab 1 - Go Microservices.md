@@ -182,7 +182,7 @@ To be able to setup CI/CD webhooks, you'll need to fork the application into you
 
 <a class="github-button" href="https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-api/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork MicrosoftDocs/mslearn-aks-workshop-ratings-api on GitHub">Fork</a>
 
-<validation step="a2110909-a71b-4cba-8adb-f1dfd3c6a9a4" />
+<validation step="23fddc91-e528-4da4-b071-66db905916a4" />
 
 ### Use the OpenShift CLI to deploy the `rating-api`
 
@@ -354,7 +354,7 @@ To be able to setup CI/CD webhooks, you'll need to fork the application into you
 
 <a class="github-button" href="https://github.com/MicrosoftDocs/mslearn-aks-workshop-ratings-web/fork" data-icon="octicon-repo-forked" data-size="large" aria-label="Fork MicrosoftDocs/mslearn-aks-workshop-ratings-web on GitHub">Fork</a>
 
-<validation step="9e829e84-c475-424f-9cde-e5e8cd9a873e" />
+<validation step="fcd56ef7-7985-4958-9f49-fed4ead8a955" />
 
 ### Modify Dockerfile in your repository
 
