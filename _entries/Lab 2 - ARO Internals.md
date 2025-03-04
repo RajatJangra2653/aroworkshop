@@ -421,28 +421,28 @@ In this section we'll see how OSToy uses intra-cluster networking to separate fu
       ![Home Page](../media/managedlab/networking.png)
 1. The right tile titled "Hostname Lookup" illustrates how the service name created for a pod can be used to translate into an internal ClusterIP address. Enter the name of the microservice following the format of `my-svc.my-namespace.svc.cluster.local` which we created in our `ostoy-microservice.yaml` as seen here:
 
-```
-apiVersion: v1
-kind: Service
-metadata:
-  name: ostoy-microservice-svc
-  labels:
-    app: ostoy-microservice
-spec:
-  type: ClusterIP
-  ports:
-    - port: 8080
-      targetPort: 8080
-      protocol: TCP
-  selector:
-    app: ostoy-microservice
-```
+   ```
+   apiVersion: v1
+   kind: Service
+   metadata:
+   name: ostoy-microservice-svc
+   labels:
+      app: ostoy-microservice
+   spec:
+   type: ClusterIP
+   ports:
+      - port: 8080
+         targetPort: 8080
+         protocol: TCP
+   selector:
+      app: ostoy-microservice
+   ```
 
-In this case we will enter: `ostoy-microservice-svc.ostoy.svc.cluster.local`
+1. In this case we will enter: `ostoy-microservice-svc.ostoy.svc.cluster.local` in the hostname parameter, and click on **DNS Lookup**.
 
-We will see an IP address returned.  In our example it is `172.30.165.246`.  This is the intra-cluster IP address; only accessible from within the cluster.
+1. We will see an IP address returned.  In our example it is `172.30.165.246`.  This is the intra-cluster IP address; only accessible from within the cluster.
 
-![ostoy DNS](../media/managedlab/20-ostoy-dns.png)
+   ![ostoy DNS](../media/managedlab/20-ostoy-dns.png)
 
 ### Scaling
 
