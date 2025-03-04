@@ -586,13 +586,13 @@ We will create a HPA and then use OSToy to generate CPU intensive workloads.  We
    ostoy-microservice-cf8bfb4c-xls2t   1/1     Running   0              104s
    ```
 
-#### 5. Review resources in included observability
+### 5. Review resources in included observability
 
-In the OpenShift web console left menu, click on *Observe > Dashboards*
+1. In the OpenShift web console left menu, click on *Observe > Dashboards*
 
-In the dashboard, select *Kubernetes / Compute Resources / Namespace (Pods)* and our namespace *ostoy*.
+1. In the dashboard, select *Kubernetes / Compute Resources / Namespace (Pods)* and our namespace *ostoy*.
 
-![select_metrics](../media/managedlab/34-hpametrics.png)
+   ![select_metrics](../media/managedlab/34-hpametrics.png)
 
 Wait a few minutes and colorful graphs will appear showing resource usage across CPU and memory. The top graph will show recent CPU consumption per pod and the lower graph will indicate memory usage. Looking at this graph you can see how things developed. As soon as the load started to increase (A), two new pods started to spin up (B, C). The thickness of each graph is its CPU consumption indicating which pods handled more load. We also see that the load decreased (D), after which, the pods were spun back down.
 
