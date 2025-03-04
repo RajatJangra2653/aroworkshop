@@ -348,34 +348,35 @@ ConfigMaps allow you to decouple configuration artifacts from container image co
 
    ![Home Page](../media/managedlab/configmaps.png)
 
-This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
+1. This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
 
-```
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: ostoy-configmap-files
-data:
-  config.json:  '{ "default": "123" }'
-```
+   ```
+   kind: ConfigMap
+   apiVersion: v1
+   metadata:
+   name: ostoy-configmap-files
+   data:
+   config.json:  '{ "default": "123" }'
+   ```
 
 ### Configuration using Secrets
 
 Kubernetes Secret objects allow you to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys. Putting this information in a secret is safer and more flexible than putting it, verbatim, into a pod definition or a container image.
 
-Click on *Secrets* in the left menu.
+1. Click on *Secrets* in the left menu.
 
-This will display the contents of the secrets available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
+   ![Home Page](../media/managedlab/secrets.png)
+1. This will display the contents of the secrets available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
 
-```
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ostoy-secret
-data:
-  secret.txt: VVNFUk5BTUU9bXlfdXNlcgpQQVNTV09SRD1AT3RCbCVYQXAhIzYzMlk1RndDQE1UUWsKU01UUD1sb2NhbGhvc3QKU01UUF9QT1JUPTI1
-type: Opaque
-```
+   ```
+   apiVersion: v1
+   kind: Secret
+   metadata:
+   name: ostoy-secret
+   data:
+   secret.txt: VVNFUk5BTUU9bXlfdXNlcgpQQVNTV09SRD1AT3RCbCVYQXAhIzYzMlk1RndDQE1UUWsKU01UUD1sb2NhbGhvc3QKU01UUF9QT1JUPTI1
+   type: Opaque
+   ```
 
 ### Configuration using Environment Variables
 
