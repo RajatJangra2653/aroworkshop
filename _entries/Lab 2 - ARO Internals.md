@@ -566,20 +566,25 @@ We will create a HPA and then use OSToy to generate CPU intensive workloads.  We
 
 ### 4. See the pods scale up
 
-After about a minute the new pods will show up on the page (represented by the colored rectangles). Confirm that the pods did indeed scale up through the OpenShift Web Console or the CLI (you can use the command above).
+1. After about a minute the new pods will show up on the page (represented by the colored rectangles). Confirm that the pods did indeed scale up through the OpenShift Web Console or the CLI (you can use the command above).
 
-> **Note:** The page may still lag a bit which is normal.
+   > **Note:** The page may still lag a bit which is normal.
 
-You can see in this case it scaled up 2 more microservice pods (for a total of 3).
+1. You can see in this case it scaled up 2 more microservice pods (for a total of 3), using the command 
 
-```
-$ oc get pods --field-selector=status.phase=Running
-NAME                                READY   STATUS    RESTARTS       AGE
-ostoy-frontend-64c8668694-7pq6k     1/1     Running   3 (105m ago)   23h
-ostoy-microservice-cf8bfb4c-bkwx8   1/1     Running   0              104s
-ostoy-microservice-cf8bfb4c-j24f9   1/1     Running   0              23h
-ostoy-microservice-cf8bfb4c-xls2t   1/1     Running   0              104s
-```
+   ```
+   oc get pods
+   ```
+1. The output will be similar to the following:
+
+   ```
+   $ oc get pods 
+   NAME                                READY   STATUS    RESTARTS       AGE
+   ostoy-frontend-64c8668694-7pq6k     1/1     Running   3 (105m ago)   23h
+   ostoy-microservice-cf8bfb4c-bkwx8   1/1     Running   0              104s
+   ostoy-microservice-cf8bfb4c-j24f9   1/1     Running   0              23h
+   ostoy-microservice-cf8bfb4c-xls2t   1/1     Running   0              104s
+   ```
 
 #### 5. Review resources in included observability
 
