@@ -594,11 +594,11 @@ We will create a HPA and then use OSToy to generate CPU intensive workloads.  We
 
    ![select_metrics](../media/managedlab/34-hpametrics.png)
 
-Wait a few minutes and colorful graphs will appear showing resource usage across CPU and memory. The top graph will show recent CPU consumption per pod and the lower graph will indicate memory usage. Looking at this graph you can see how things developed. As soon as the load started to increase (A), two new pods started to spin up (B, C). The thickness of each graph is its CPU consumption indicating which pods handled more load. We also see that the load decreased (D), after which, the pods were spun back down.
+1. Wait a few minutes and colorful graphs will appear showing resource usage across CPU and memory. The top graph will show recent CPU consumption per pod and the lower graph will indicate memory usage. Looking at this graph you can see how things developed. As soon as the load started to increase (A), two new pods started to spin up (B, C). The thickness of each graph is its CPU consumption indicating which pods handled more load. We also see that the load decreased (D), after which, the pods were spun back down.
 
-![select_metrics](../media/managedlab/35-metrics.png)
+   ![select_metrics](../media/managedlab/35-metrics.png)
 
-At this point feel free to go back to the [logging section](#lab2-logging) to view this data through Container Insights for Azure Arc-enabled Kubernetes clusters.
+1. At this point feel free to go back to the [logging section](#lab2-logging) to view this data through Container Insights for Azure Arc-enabled Kubernetes clusters.
 
 ## Task 9: Managing Worker Nodes
 
@@ -606,67 +606,71 @@ There may be times when you need to change aspects of your worker nodes. Things 
 
 ### Scaling worker nodes
 
-#### View the machine sets that are in the cluster
+### View the machine sets that are in the cluster
 
-Let’s see which machine sets we have in our cluster. If you are following this lab, you should only have three so far (one for each availability zone).
+1. Let’s see which machine sets we have in our cluster. If you are following this lab, you should only have three so far (one for each availability zone). From the terminal run:
 
-From the terminal run:
+   ```
+   oc get machinesets -n openshift-machine-api
+   ```
 
-`oc get machinesets -n openshift-machine-api`
+1. You will see a response like:
 
-You will see a response like:
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   1         1         1       1           72m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           72m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           72m
+   ```
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   1         1         1       1           72m
-ok0620-rq5tl-worker-westus22   1         1         1       1           72m
-ok0620-rq5tl-worker-westus23   1         1         1       1           72m
-```
+1. This is telling us that there is a machine set defined for each availability zone in westus2 and that each has one machine.
 
-This is telling us that there is a machine set defined for each availability zone in westus2 and that each has one machine.
+### View the machines that are in the cluster
 
-#### View the machines that are in the cluster
+1. Let’s see which machines (nodes) we have in our cluster. From the terminal run:
 
-Let’s see which machines (nodes) we have in our cluster.
+   ```
+   oc get machine -n openshift-machine-api
+   ```
 
-From the terminal run:
+1. You will see a response like:
 
-`oc get machine -n openshift-machine-api`
+   ```
+   $ oc get machine -n openshift-machine-api
+   NAME                                 PHASE     TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running   Standard_D8s_v3   westus2   1      73m
+   ok0620-rq5tl-master-1                Running   Standard_D8s_v3   westus2   2      73m
+   ok0620-rq5tl-master-2                Running   Standard_D8s_v3   westus2   3      73m
+   ok0620-rq5tl-worker-westus21-n6lcs   Running   Standard_D4s_v3   westus2   1      73m
+   ok0620-rq5tl-worker-westus22-ggcmv   Running   Standard_D4s_v3   westus2   2      73m
+   ok0620-rq5tl-worker-westus23-hzggb   Running   Standard_D4s_v3   westus2   3      73m
+   ```
 
-You will see a response like:
+1. As you can see we have 3 master nodes, 3 worker nodes, the types of nodes, and which region/zone they are in.
 
-```
-$ oc get machine -n openshift-machine-api
-NAME                                 PHASE     TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running   Standard_D8s_v3   westus2   1      73m
-ok0620-rq5tl-master-1                Running   Standard_D8s_v3   westus2   2      73m
-ok0620-rq5tl-master-2                Running   Standard_D8s_v3   westus2   3      73m
-ok0620-rq5tl-worker-westus21-n6lcs   Running   Standard_D4s_v3   westus2   1      73m
-ok0620-rq5tl-worker-westus22-ggcmv   Running   Standard_D4s_v3   westus2   2      73m
-ok0620-rq5tl-worker-westus23-hzggb   Running   Standard_D4s_v3   westus2   3      73m
-```
+### Scale the number of nodes up via the CLI
 
-As you can see we have 3 master nodes, 3 worker nodes, the types of nodes, and which region/zone they are in.
+1. Now that we know that we have 3 worker nodes, let’s scale the cluster up to have 4 worker nodes. We can accomplish this through the CLI or through the OpenShift Web Console. We’ll explore both.
 
-#### Scale the number of nodes up via the CLI
+1. From the terminal run the following to imperatively scale up a machine set to 2 worker nodes for a total of 4. Remember that each machine set is tied to an availability zone so with 3 machine sets with 1 machine each, in order to get to a TOTAL of 4 nodes we need to select one of the machine sets to scale up to 2 machines.
 
-Now that we know that we have 3 worker nodes, let’s scale the cluster up to have 4 worker nodes. We can accomplish this through the CLI or through the OpenShift Web Console. We’ll explore both.
+   ```
+   oc scale --replicas=2 machineset <machineset> -n openshift-machine-api
+   ```
+1. The output will be similar to the following:
 
-From the terminal run the following to imperatively scale up a machine set to 2 worker nodes for a total of 4. Remember that each machine set is tied to an availability zone so with 3 machine sets with 1 machine each, in order to get to a TOTAL of 4 nodes we need to select one of the machine sets to scale up to 2 machines.
+   ```$ oc scale --replicas=2 machineset ok0620-rq5tl-worker-westus23 -n openshift-machine-api
+   machineset.machine.openshift.io/ok0620-rq5tl-worker-westus23 scaled
+   ```
 
-`oc scale --replicas=2 machineset <machineset> -n openshift-machine-api`
+1. View the machine set by running the following command in terminal:
 
-For example:
+   ```
+   oc get machinesets -n openshift-machine-api
+   ```
 
-`$ oc scale --replicas=2 machineset ok0620-rq5tl-worker-westus23 -n openshift-machine-api
-machineset.machine.openshift.io/ok0620-rq5tl-worker-westus23 scaled`
-
-View the machine set
-
-`oc get machinesets -n openshift-machine-api`
-
-You will now see that the desired number of machines in the machine set we scaled is “2”.
+1. You will now see that the desired number of machines in the machine set we scaled is “2”.
 
 ```
 $ oc get machinesets -n openshift-machine-api
@@ -676,23 +680,25 @@ ok0620-rq5tl-worker-westus22   1         1         1       1           73m
 ok0620-rq5tl-worker-westus23   2         2         1       1           73m
 ```
 
-If we check the machines in the clusters
+1. To check the machines in the clusters, run the following command in terminal
 
-`oc get machine -n openshift-machine-api`
+   ```
+   oc get machine -n openshift-machine-api
+   ```
 
-You will see that one is in the “Provisioned” phase (and in the zone of the machineset we scaled) and will shortly be in “running” phase.
+1. You will see that one is in the “Provisioned” phase (and in the zone of the machineset we scaled) and will shortly be in “running” phase.
 
-```
-$ oc get machine -n openshift-machine-api
-NAME                                 PHASE         TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      74m
-ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      74m
-ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      74m
-ok0620-rq5tl-worker-westus21-n6lcs   Running       Standard_D4s_v3   westus2   1      74m
-ok0620-rq5tl-worker-westus22-ggcmv   Running       Standard_D4s_v3   westus2   2      74m
-ok0620-rq5tl-worker-westus23-5fhm5   Provisioned   Standard_D4s_v3   westus2   3      54s
-ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      74m
-```
+   ```
+   $ oc get machine -n openshift-machine-api
+   NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      74m
+   ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      74m
+   ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      74m
+   ok0620-rq5tl-worker-westus21-n6lcs   Running       Standard_D4s_v3   westus2   1      74m
+   ok0620-rq5tl-worker-westus22-ggcmv   Running       Standard_D4s_v3   westus2   2      74m
+   ok0620-rq5tl-worker-westus23-5fhm5   Provisioned   Standard_D4s_v3   westus2   3      54s
+   ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      74m
+   ```
 
 #### Scale the number of nodes down via the Web Console
 
