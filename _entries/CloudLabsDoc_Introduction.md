@@ -134,13 +134,13 @@ Head over to <https://shell.azure.com> and sign in with your Azure Subscription 
 
    ![](../media/cloudshell/select-create-strg.png)
 
-1. Specify then following values and click **Create** to create a new storage account.
+1. Specify then following values and click **Create (6)** to create a new storage account.
 
-   - Subscription: **Select your default subscription**
-   - Resource group: **openshift**
-   - Region: **<inject key="Region" enableCopy="false"/>**
-   - Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/>**
-   - File share: **none**
+   - Subscription: **Select your default subscription (1)**
+   - Resource group: **openshift (2)**
+   - Region: **<inject key="Region" enableCopy="false"/> (3)**
+   - Storage account name: **strg<inject key="Deployment ID" enableCopy="false"/> (4)**
+   - File share: **none (5)**
 
    ![](../media/Redhat-image2.png)
 
