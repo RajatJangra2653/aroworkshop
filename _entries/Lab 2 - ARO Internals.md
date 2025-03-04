@@ -250,8 +250,7 @@ In this section we will intentionally crash our pods and also make a pod non-res
 1. You can also check in the pod events and further verify that the container has crashed and been restarted. Click on **Pods > [Pod Name] > Events**
 
    ![Pods](../media/managedlab/13.1-ostoy-fepod.png)
-
-
+   
    ![Pod Events](../media/managedlab/14-ostoy-podevents.png)
 
 1. Keep the page from the pod events still open from the previous step.  Then in the OSToy app click on the "Toggle Health" button, in the "Toggle health status" tile.  You will see the "Current Health" switch to "I'm not feeling all that well".
