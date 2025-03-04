@@ -347,7 +347,7 @@ ConfigMaps allow you to decouple configuration artifacts from container image co
 
 1. In the OSToy app click on *Config Maps* in the left menu.
 
-![Home Page](../media/managedlab/configmaps.png)
+   ![Home Page](../media/managedlab/configmaps.png)
 
 This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
 
