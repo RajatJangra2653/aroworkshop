@@ -413,17 +413,17 @@ wget https://raw.githubusercontent.com/sajitsasi/rating-web/master/src/component
 
 4. Verify, stage, commit and push changes to your local repository
 
-```sh
-git status
-git add .
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
-git commit -m "Modified Dockerfile and Footer.vue"
-git push
-```
-> **Note**: Once you run the **git push** command, make sure you enter your **GitHub Username** and the **Personal Access Token as Password** during the authentication process.
+    ```sh
+    git status
+    git add .
+    git config --global user.email "you@example.com"
+    git config --global user.name "Your Name"
+    git commit -m "Modified Dockerfile and Footer.vue"
+    git push
+    ```
+    > **Note**: Once you run the **git push** command, make sure you enter your **GitHub Username** and the **Personal Access Token as Password** during the authentication process.
 
-![Push changes to repository](../media/git-push.png)
+    ![Push changes to repository](../media/git-push.png)
 
 ### Use the OpenShift CLI to deploy the `rating-web`
 
@@ -450,83 +450,83 @@ oc set env deploy rating-web API=http://rating-api:8080
 
 ### Expose the `rating-web` service using a Route
 
-Expose the service.
+1. Expose the service.
 
-```sh
-oc expose svc/rating-web
-```
+    ```sh
+    oc expose svc/rating-web
+    ```
 
-Find out the created route hostname
+1. Find out the created route hostname
 
-```sh
-oc get route rating-web
-```
+    ```sh
+    oc get route rating-web
+    ```
 
-You should get a response similar to the below.
+1. You should get a response similar to the below.
 
-![Retrieve the created route](../media/oc-get-route.png)
+    ![Retrieve the created route](../media/oc-get-route.png)
 
-Notice the fully qualified domain name (FQDN) is comprised of the application name and project name by default. The remainder of the FQDN, the subdomain, is your Azure Red Hat OpenShift cluster specific apps subdomain.
+1. Notice the fully qualified domain name (FQDN) is comprised of the application name and project name by default. The remainder of the FQDN, the subdomain, is your Azure Red Hat OpenShift cluster specific apps subdomain.
 
 ### Try the service
 
-Open the hostname in your browser, you should see the rating app page. Use **http://** port and not **https://** port to open the hostname in your browser. Play around, submit a few votes and check the leaderboard.
+1. Open the hostname in your browser, you should see the rating app page. Use **http://** port and not **https://** port to open the hostname in your browser. Play around, submit a few votes and check the leaderboard.
 
-![rating-web homepage](../media/rating-web-homepage.png)
+    ![rating-web homepage](../media/rating-web-homepage.png)
 
 ### Setup GitHub webhook
 
-To trigger S2I builds when you push code into your GitHib repo, you'll need to setup the GitHub webhook.
+1. To trigger S2I builds when you push code into your GitHib repo, you'll need to setup the GitHub webhook.
 
-Retrieve the GitHub webhook trigger secret. You'll need use this secret in the GitHub webhook URL.
+1. Retrieve the GitHub webhook trigger secret. You'll need use this secret in the GitHub webhook URL.
 
-```sh
-oc get bc/rating-web -o=jsonpath='{.spec.triggers..github.secret}'
-```
+    ```sh
+    oc get bc/rating-web -o=jsonpath='{.spec.triggers..github.secret}'
+    ```
 
-You'll get back something similar to the below. Make note the secret key in the red box as you'll need it in a few steps.
+1. You'll get back something similar to the below. Make note the secret key in the red box as you'll need it in a few steps.
 
-![Rating Web GitHub trigger secret](../media/rating-web-github-secret.png)
+    ![Rating Web GitHub trigger secret](../media/rating-web-github-secret.png)
 
-Retrieve the GitHub webhook trigger URL from the build configuration.
+1. Retrieve the GitHub webhook trigger URL from the build configuration.
 
-```sh
-oc describe bc/rating-web
-```
+    ```sh
+    oc describe bc/rating-web
+    ```
 
-![Rating Web GitHub trigger url](../media/rating-web-github-webhook-url.png)
+    ![Rating Web GitHub trigger url](../media/rating-web-github-webhook-url.png)
 
-Replace the `<secret>` placeholder with the secret you retrieved in the previous step to have a URL similar to `https://api.otyvsnz3.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-web/webhooks/SECRETSTRING/github`. You'll use this URL to setup the webhook on your GitHub repository.
+1. Replace the `<secret>` placeholder with the secret you retrieved in the previous step to have a URL similar to `https://api.otyvsnz3.eastus.aroapp.io:6443/apis/build.openshift.io/v1/namespaces/workshop/buildconfigs/rating-web/webhooks/SECRETSTRING/github`. You'll use this URL to setup the webhook on your GitHub repository.
 
-In your GitHub repository, select **Add Webhook** from **Settings** → **Webhooks**.
+1. In your GitHub repository, select **Add Webhook** from **Settings** → **Webhooks**.
 
-Paste the URL output (similar to above) into the Payload URL field.
+1. Paste the URL output (similar to above) into the Payload URL field.
 
-Change the Content Type from GitHub’s default **application/x-www-form-urlencoded** to **application/json**.
+1. Change the Content Type from GitHub’s default **application/x-www-form-urlencoded** to **application/json**.
 
-Click **Add webhook**.
+1. Click **Add webhook**.
 
-![GitHub add webhook](../media/rating-web-github-addwebhook.png)
+    ![GitHub add webhook](../media/rating-web-github-addwebhook.png)
 
-You should see a message from GitHub stating that your webhook was successfully configured.
+1. You should see a message from GitHub stating that your webhook was successfully configured.
 
-Now, whenever you push a change to your GitHub repository, a new build will automatically start, and upon a successful build a new deployment will start.
+1. Now, whenever you push a change to your GitHub repository, a new build will automatically start, and upon a successful build a new deployment will start.
 
 ### Make a change to the website app and see the rolling update
 
-Go to the `https://github.com/<your GitHub username>/mslearn-aks-workshop-ratings-web/blob/master/src/App.vue` file in your repository on GitHub.
+1. Go to the `https://github.com/<your GitHub username>/mslearn-aks-workshop-ratings-web/blob/master/src/App.vue` file in your repository on GitHub.
 
-Edit the file, and change the `background-color: #999;` line to be `background-color: #0071c5`.
+1. Edit the file, and change the `background-color: #999;` line to be `background-color: #0071c5`.
 
-Commit the changes to the file into the `master` branch.
+1. Commit the changes to the file into the `master` branch.
 
-![GitHub edit app](../media/rating-web-editcolor.png)
+    ![GitHub edit app](../media/rating-web-editcolor.png)
 
-Immediately, go to the **Builds** tab in the OpenShift Web Console. You'll see a new build queued up which was triggered by the push. Once this is done, it will trigger a new deployment and you should see the new website color updated.
+1. Immediately, go to the **Builds** tab in the OpenShift Web Console. You'll see a new build queued up which was triggered by the push. Once this is done, it will trigger a new deployment and you should see the new website color updated.
 
-![Webhook build](../media/rating-web-cicd-build.png)
+    ![Webhook build](../media/rating-web-cicd-build.png)
 
-![New rating website](../media/rating-web-newcolor.png)
+    ![New rating website](../media/rating-web-newcolor.png)
 
 > **Resources**
 > * [ARO Documentation - Triggering builds](https://docs.openshift.com/aro/4/builds/triggering-builds-build-hooks.html)
@@ -537,39 +537,40 @@ Now that you have the application working, it is time to apply some security har
 
 ### Switch to the Cluster Console
 
-Switch to the Administrator console.
-![Switch to the Administrator console](../media/switch-to-admin-console.png)
+1. Switch to the Administrator console.
 
-Make sure you're in the **workshop** project, expand **Networking**, select **NetwokPolicies** and click **Create Network Policy**.
-![Cluster console page](../media/cluster-console.png)
+    ![Switch to the Administrator console](../media/switch-to-admin-console.png)
+
+1. Make sure you're in the **workshop** project, expand **Networking**, select **NetwokPolicies** and click **Create Network Policy**.
+
+    ![Cluster console page](../media/cluster-console.png)
 
 ### Create network policy
 
-You will create a policy that applies to any pod matching the `app=rating-api` label. The policy will allow ingress only from pods matching the `app=rating-web` label.
+1. You will create a policy that applies to any pod matching the `app=rating-api` label. The policy will allow ingress only from pods matching the `app=rating-web` label.
 
-Use the YAML below in the editor, and make sure you're targeting the **workshop** project.
+1. Use the YAML below in the editor, and make sure you're targeting the **workshop** project.
 
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: api-allow-from-web
-  namespace: workshop
-spec:
-  podSelector:
-    matchLabels:
-      app: rating-api
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: rating-web
-```
+    ```yaml
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+      name: api-allow-from-web
+      namespace: workshop
+    spec:
+      podSelector:
+        matchLabels:
+          app: rating-api
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  app: rating-web
+    ```
 
-![Create network policy](../media/create-networkpolicy.png)
+    ![Create network policy](../media/create-networkpolicy.png)
 
-Click **Create**.
-[ARO Documentation - Managing Networking with Network Policy](https://docs.openshift.com/aro/4/networking/network_policy/creating-network-policy.html)
+1. Click **Create**.
 
 ## Reference Links
 
