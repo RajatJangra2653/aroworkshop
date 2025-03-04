@@ -266,41 +266,45 @@ In this section we will intentionally crash our pods and also make a pod non-res
 
 In this section we will execute a simple example of using persistent storage by creating a file that will be stored on a persistent volume in our cluster and then confirm that it will "persist" across pod failures and recreation.
 
-Inside the OpenShift web console click on *Storage > Persistent Volume Claims* in the left menu. You will then see a list of all persistent volume claims that our application has made.  In this case there is just one called "ostoy-pvc".  If you click on it you will also see other pertinent information such as whether it is bound or not, size, access mode and creation time.  
+1. Inside the OpenShift web console click on *Storage > Persistent Volume Claims* in the left menu. You will then see a list of all persistent volume claims that our application has made.  In this case there is just one called "ostoy-pvc".  If you click on it you will also see other pertinent information such as whether it is bound or not, size, access mode and creation time.  
 
-In this case the mode is RWO (Read-Write-Once) which means that the volume can only be mounted to one node, but the pod(s) can both read and write to that volume.  The [default in ARO](https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs) is for Persistent Volumes to be backed by Azure Disk, but it is possible to [use Azure Files](https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html) so that you can use the RWX (Read-Write-Many) access mode.  See here for more info on [access modes](https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage).
+1. In this case the mode is RWO (Read-Write-Once) which means that the volume can only be mounted to one node, but the pod(s) can both read and write to that volume.  The [default in ARO](https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs) is for Persistent Volumes to be backed by Azure Disk, but it is possible to [use Azure Files](https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html) so that you can use the RWX (Read-Write-Many) access mode.  See here for more info on [access modes](https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage).
 
-In the OSToy app click on *Persistent Storage* in the left menu.  In the "Filename" area enter a filename for the file you will create (e.g., "test-pv.txt"). Use the ".txt" extension so you can easily open it in the browser.
+1. In the OSToy app click on *Persistent Storage* in the left menu.  In the "Filename" area enter a filename for the file you will create (e.g., "test-pv.txt"). Use the ".txt" extension so you can easily open it in the browser.
 
-Underneath that, in the "File contents" box, enter text to be stored in the file. (e.g., "Azure Red Hat OpenShift is the greatest thing since sliced bread!"). Then click "Create file".
+1. Underneath that, in the "File contents" box, enter text to be stored in the file. (e.g., "Azure Red Hat OpenShift is the greatest thing since sliced bread!"). Then click "Create file".
 
-![](../media/Redhat-image16.png)
+   ![](../media/Redhat-image16.png)
 
-You will then see the file you created appear above under "Existing files".  Click on the file and you will see the filename and the contents you entered.
+1. You will then see the file you created appear above under "Existing files".  Click on the file and you will see the filename and the contents you entered.
 
-![](../media/Redhat-image17.png)
+   ![](../media/Redhat-image17.png)
 
-We now want to kill the pod and ensure that the new pod that spins up will be able to see the file we created. Exactly like we did in the previous section. Click on *Home* in the left menu.
+1. We now want to kill the pod and ensure that the new pod that spins up will be able to see the file we created. Exactly like we did in the previous section. Click on *Home* in the left menu.
 
-Click on the "Crash pod" button.  (You can enter a message if you'd like).
+1. Click on the "Crash pod" button.  (You can enter a message if you'd like).
 
-Click on *Persistent Storage* in the left menu.
+1. Click on *Persistent Storage* in the left menu.
 
-You will see the file you created is still there and you can open it to view its contents to confirm.
+1. You will see the file you created is still there and you can open it to view its contents to confirm.
 
-![Crash Message](../media/managedlab/19-ostoy-existingfile.png)
+   ![Crash Message](../media/managedlab/19-ostoy-existingfile.png)
 
-Now let's confirm that it's actually there by using the CLI and checking if it is available to the container.  If you remember we [mounted the directory](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-fe-deployment.yaml#L50) `/var/demo_files` to our PVC.  So get the name of your frontend pod:
+1. Now let's confirm that it's actually there by using the CLI and checking if it is available to the container.  If you remember we [mounted the directory](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-fe-deployment.yaml#L50) `/var/demo_files` to our PVC.  So get the name of your frontend pod:
 
-`oc get pods`
+   ```
+   `oc get pods`
+   ```
 
-then get an SSH session into the container
+1. Then get an SSH session into the container
 
-`oc rsh <pod name>`
+   ```
+   `oc rsh <pod name>`
+   ```
 
-then `cd /var/demo_files`
+1. Then `cd /var/demo_files`
 
-if you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents
+1. If you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents
 
 `cat test-pv.txt`
 
