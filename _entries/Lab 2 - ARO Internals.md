@@ -72,42 +72,38 @@ To learn more, click on the "About" menu item on the left once we deploy the app
 
 ### Retrieve login command
 
-If not logged in via the CLI, click on the dropdown arrow next to your name in the top-right and select *Copy Login Command*.
+1. If not logged in via the CLI, click on the dropdown arrow next to your name in the top-right and select *Copy Login Command*.
 
-![CLI Login](../media/managedlab/7-ostoy-login.png)
+   ![CLI Login](../media/managedlab/7-ostoy-login.png)
 
-A new tab will open click "Display Token"
+1. A new tab will open click "Display Token"
 
-Copy the command under where it says, "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
+1. Copy the command under where it says, "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
 
-```
-$ oc login --token=sha256~qWBXdQ_X_4wWZor0XZO00ZZXXXXXXXXXXXX --server=https://api.abcs1234.westus.aroapp.io:6443
-Logged into "https://api.abcd1234.westus.aroapp.io:6443" as "kube:admin" using the token provided.
+   ```
+   $ oc login --token=sha256~qWBXdQ_X_4wWZor0XZO00ZZXXXXXXXXXXXX --server=https://api.abcs1234.westus.aroapp.io:6443
+   Logged into "https://api.abcd1234.westus.aroapp.io:6443" as "kube:admin" using the token provided.
 
-You have access to 67 projects, the list has been suppressed. You can list all projects with 'oc projects'
+   You have access to 67 projects, the list has been suppressed. You can list all projects with 'oc projects'
 
-Using project "default".
-```
+   Using project "default".
+   ```
 
 ### Create new project
 
-Create a new project called "OSToy" in your cluster.
+1.  To Create a new project called "OSToy" in your cluster, Use the following command `oc new-project ostoy`
 
-Use the following command
+1. You should receive the following response
 
-`oc new-project ostoy`
+   ```
+   $ oc new-project ostoy
+   Now using project "ostoy" on server "https://api.abcd1234.westus2.aroapp.io:6443".
+   [...]
+   ```
 
-You should receive the following response
+1. Equivalently you can also create this new project using the web console by selecting *Home > Projects* on the left menu, then clicking on the "Create Project" button on the right.
 
-```
-$ oc new-project ostoy
-Now using project "ostoy" on server "https://api.abcd1234.westus2.aroapp.io:6443".
-[...]
-```
-
-Equivalently you can also create this new project using the web console by selecting *Home > Projects* on the left menu, then clicking on the "Create Project" button on the right.
-
-![UI Create Project](../media/managedlab/6-ostoy-newproj.png)
+   ![UI Create Project](../media/managedlab/6-ostoy-newproj.png)
 
 ### View the YAML deployment objects
 
@@ -121,18 +117,20 @@ Feel free to open them up and take a look at what we will be deploying. For simp
 
 ### Deploy backend microservice
 
-The microservice serves internal web requests and returns a JSON object containing the current hostname and a randomly generated color string.
+1. The microservice serves internal web requests and returns a JSON object containing the current hostname and a randomly generated color string.
 
-In your terminal deploy the microservice using the following command:
+1. In your terminal deploy the microservice using the following command:
 
-`oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml`
+   ```
+   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml`
+   ```
 
-You should see the following response:
-```
-$ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
-deployment.apps/ostoy-microservice created
-service/ostoy-microservice-svc created
-```
+1. You should see the following response:
+   ```
+   $ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
+   deployment.apps/ostoy-microservice created
+   service/ostoy-microservice-svc created
+   ```
 
 ### Deploy the front-end service
 
@@ -147,181 +145,197 @@ If you open the *ostoy-frontend-deployment.yaml* you will see we are defining:
 - Configmaps
 - Secrets
 
-Deploy the frontend along with creating all objects mentioned above by entering:
+1. Deploy the frontend along with creating all objects mentioned above by entering:
 
-`oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml`
+   ```
+   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml`
+   ```
 
-You should see all objects created successfully
+1. You should see all objects created successfully
 
-```
-$ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml
-persistentvolumeclaim/ostoy-pvc created
-deployment.apps/ostoy-frontend created
-service/ostoy-frontend-svc created
-route.route.openshift.io/ostoy-route created
-configmap/ostoy-configmap-env created
-secret/ostoy-secret-env created
-configmap/ostoy-configmap-files created
-secret/ostoy-secret created
-```
+   ```
+   $ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml
+   persistentvolumeclaim/ostoy-pvc created
+   deployment.apps/ostoy-frontend created
+   service/ostoy-frontend-svc created
+   route.route.openshift.io/ostoy-route created
+   configmap/ostoy-configmap-env created
+   secret/ostoy-secret-env created
+   configmap/ostoy-configmap-files created
+   secret/ostoy-secret created
+   ```
 
 ### Get route
 
-Get the route so that we can access the application via:
+1. Get the route so that we can access the application via:
 
- `oc get route`
+   ```
+   `oc get route`
+   ```
  
-You should see the following response:
+1. You should see the following response:
 
-```
-NAME           HOST/PORT                                                      PATH      SERVICES              PORT      TERMINATION   WILDCARD
-ostoy-route   ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io             ostoy-frontend-svc   <all>                   None
-```
+   ```
+   NAME           HOST/PORT                                                      PATH      SERVICES              PORT      TERMINATION   WILDCARD
+   ostoy-route   ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io             ostoy-frontend-svc   <all>                   None
+   ```
 
-Copy `ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io` above and paste it into your browser (use **http://**) and press enter. You should see the homepage of our application. 
+1. Copy the link under **HOST/PORT** and paste it into your browser (use **http://**) and press enter. You should see the homepage of our application. 
 
-![Home Page](../media/managedlab/10-ostoy-homepage.png)
+   ![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
 ## Task 3: Logging and Metrics
 
 Assuming you can access the application via the Route provided and are still logged into the CLI (please go back to part 2 if you need to do any of those) we'll start to use this application.  As stated earlier, this application will allow you to "push the buttons" of OpenShift and see how it works.  We will do this to test the logs.
 
-Click on the *Home* menu item and then click in the message box for "Log Message (stdout)" and write any message you want to output to the *stdout* stream.  You can try "**All is well!**".  Then click "Send Message".
+1. Click on the *Home* menu item and then click in the message box for "Log Message (stdout)" and write any message you want to output to the *stdout* stream.  You can try "**All is well!**".  Then click "Send Message".
 
-![Logging stdout](../media/managedlab/8-ostoy-stdout.png)
+   ![Logging stdout](../media/managedlab/8-ostoy-stdout.png)
 
-Click in the message box for "Log Message (stderr)" and write any message you want to output to the *stderr* stream. You can try "**Oh no! Error!**".  Then click "Send Message".
+1. Click in the message box for "Log Message (stderr)" and write any message you want to output to the *stderr* stream. You can try "**Oh no! Error!**".  Then click "Send Message".
 
-![Logging stderr](../media/managedlab/9-ostoy-stderr.png)
+   ![Logging stderr](../media/managedlab/9-ostoy-stderr.png)
 
 ### View logs directly from the pod
 
-Go to the CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
+1. Go to the Azure CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
 
-`oc get pods -o name`
+   ```
+   `oc get pods -o name`
+   ```
 
-```
-$ oc get pods -o name
-pod/ostoy-frontend-679cb85695-5cn7x
-pod/ostoy-microservice-86b4c6f559-p594d
-```
+1. You should see similar response:
+   ```
+   $ oc get pods -o name
+   pod/ostoy-frontend-679cb85695-5cn7x
+   pod/ostoy-microservice-86b4c6f559-p594d
+   ```
 
-So, the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
+1. So, the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
 
-```
-$ oc logs ostoy-frontend-679cb85695-5cn7x
-[...]
-ostoy-frontend-679cb85695-5cn7x: server starting on port 8080
-Redirecting to /home
-stdout: All is well!
-stderr: Oh no! Error!
-```
+1. You should see similar response:
+   ```
+   $ oc logs ostoy-frontend-679cb85695-5cn7x
+   [...]
+   ostoy-frontend-679cb85695-5cn7x: server starting on port 8080
+   Redirecting to /home
+   stdout: All is well!
+   stderr: Oh no! Error!
+   ```
 
-You should see both the *stdout* and *stderr* messages.
+1. You should see both the *stdout* and *stderr* messages.
 
-Try to see them from within the OpenShift Web Console as well. Make sure you are in the "ostoy" project. In the left menu click *Workloads > Pods > \<frontend-pod-name>*.  Then click the "Logs" sub-tab.
+1. Try to see them from within the OpenShift Web Console as well. Make sure you are in the "ostoy" project. In the left menu click *Workloads > Pods > \<frontend-pod-name>*.  Then click the "Logs" sub-tab.
 
-![web-pods](../media/managedlab/9-ostoy-wclogs.png)
+   ![web-pods](../media/managedlab/9-ostoy-wclogs.png)
 
 ## Task 4: Exploring Health Checks
 
 In this section we will intentionally crash our pods and also make a pod non-responsive to the liveness probes and see how Kubernetes behaves.  We will first intentionally crash our pod and see that Kubernetes will self-heal by immediately spinning it back up. Then we will trigger the health check by stopping the response on the `/health` endpoint in our app. After three consecutive failures, Kubernetes should kill the pod and then recreate it.
 
-It would be best to prepare by splitting your screen between the OpenShift Web Console and the OSToy application so that you can see the results of our actions immediately.
+1. It would be best to prepare by splitting your screen between the OpenShift Web Console and the OSToy application so that you can see the results of our actions immediately.
 
-![Splitscreen](../media/managedlab/23-ostoy-splitscreen.png)
+   ![Splitscreen](../media/managedlab/23-ostoy-splitscreen.png)
 
-But if your screen is too small or that just won't work, then open the OSToy application in another tab so you can quickly switch to the OpenShift Web Console once you click the button. To get to this deployment in the OpenShift Web Console go to the left menu and click:
+1. But if your screen is too small or that just won't work, then open the OSToy application in another tab so you can quickly switch to the OpenShift Web Console once you click the button. To get to this deployment in the OpenShift Web Console go to the left menu and click: **Workloads > Deployments > "ostoy-frontend"**
 
-*Workloads > Deployments > "ostoy-frontend"*
+1. Go to the browser tab that has your OSToy app, click on *Home* in the left menu, and enter a message in the "Crash Pod" tile (e.g., "This is goodbye!") and press the "Crash Pod" button.  This will cause the pod to crash and Kubernetes should restart the pod. After you press the button you will see:
 
-Go to the browser tab that has your OSToy app, click on *Home* in the left menu, and enter a message in the "Crash Pod" tile (e.g., "This is goodbye!") and press the "Crash Pod" button.  This will cause the pod to crash and Kubernetes should restart the pod. After you press the button you will see:
+   ![Crash Message](../media/managedlab/12-ostoy-crashmsg.png)
 
-![Crash Message](../media/managedlab/12-ostoy-crashmsg.png)
+1. Quickly switch to the tab with the deployment showing in the web console. You will see that the pod turns yellowish, meaning it is down but should quickly come back up and show blue.  It does happen quickly so you might miss it.
 
-Quickly switch to the tab with the deployment showing in the web console. You will see that the pod turns yellowish, meaning it is down but should quickly come back up and show blue.  It does happen quickly so you might miss it.
+   ![Pod Crash](../media/managedlab/13-ostoy-podcrash.gif)
 
-![Pod Crash](../media/managedlab/13-ostoy-podcrash.gif)
+1. You can also check in the pod events and further verify that the container has crashed and been restarted. Click on **Pods > [Pod Name] > Events**
 
-You can also check in the pod events and further verify that the container has crashed and been restarted.
-
-Click on *Pods > [Pod Name] > Events*
-
-![Pods](../media/managedlab/13.1-ostoy-fepod.png)
+   ![Pods](../media/managedlab/13.1-ostoy-fepod.png)
 
 
-![Pod Events](../media/managedlab/14-ostoy-podevents.png)
+   ![Pod Events](../media/managedlab/14-ostoy-podevents.png)
 
-Keep the page from the pod events still open from the previous step.  Then in the OSToy app click on the "Toggle Health" button, in the "Toggle health status" tile.  You will see the "Current Health" switch to "I'm not feeling all that well".
+1. Keep the page from the pod events still open from the previous step.  Then in the OSToy app click on the "Toggle Health" button, in the "Toggle health status" tile.  You will see the "Current Health" switch to "I'm not feeling all that well".
 
-![Pod Events](../media/managedlab/15-ostoy-togglehealth.png)
+   ![Pod Events](../media/managedlab/15-ostoy-togglehealth.png)
 
-This will cause the app to stop responding with a "200 HTTP code". After 3 such consecutive failures ("A"), Kubernetes will kill the pod ("B") and restart it ("C"). Quickly switch back to the pod events tab and you will see that the liveness probe failed and the pod as being restarted.
+1. This will cause the app to stop responding with a "200 HTTP code". After 3 such consecutive failures ("A"), Kubernetes will kill the pod ("B") and restart it ("C"). Quickly switch back to the pod events tab and you will see that the liveness probe failed and the pod as being restarted.
 
-![Pod Events2](../media/managedlab/16-ostoy-podevents2.png)
+   ![Pod Events2](../media/managedlab/16-ostoy-podevents2.png)
 
 ## Task 5: Persistent Storage
 
 In this section we will execute a simple example of using persistent storage by creating a file that will be stored on a persistent volume in our cluster and then confirm that it will "persist" across pod failures and recreation.
 
-Inside the OpenShift web console click on *Storage > Persistent Volume Claims* in the left menu. You will then see a list of all persistent volume claims that our application has made.  In this case there is just one called "ostoy-pvc".  If you click on it you will also see other pertinent information such as whether it is bound or not, size, access mode and creation time.  
+1. Inside the OpenShift web console click on *Storage > Persistent Volume Claims* in the left menu. You will then see a list of all persistent volume claims that our application has made.  In this case there is just one called "ostoy-pvc".  If you click on it you will also see other pertinent information such as whether it is bound or not, size, access mode and creation time.  
 
-In this case the mode is RWO (Read-Write-Once) which means that the volume can only be mounted to one node, but the pod(s) can both read and write to that volume.  The [default in ARO](https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs) is for Persistent Volumes to be backed by Azure Disk, but it is possible to [use Azure Files](https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html) so that you can use the RWX (Read-Write-Many) access mode.  See here for more info on [access modes](https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage).
+1. In this case the mode is RWO (Read-Write-Once) which means that the volume can only be mounted to one node, but the pod(s) can both read and write to that volume.  The [default in ARO](https://docs.microsoft.com/en-us/azure/openshift/openshift-faq#can-we-choose-any-persistent-storage-solution--like-ocs) is for Persistent Volumes to be backed by Azure Disk, but it is possible to [use Azure Files](https://docs.openshift.com/container-platform/latest/storage/persistent_storage/persistent-storage-azure-file.html) so that you can use the RWX (Read-Write-Many) access mode.  See here for more info on [access modes](https://docs.openshift.com/container-platform/latest/storage/understanding-persistent-storage.html#pv-access-modes_understanding-persistent-storage).
 
-In the OSToy app click on *Persistent Storage* in the left menu.  In the "Filename" area enter a filename for the file you will create (e.g., "test-pv.txt"). Use the ".txt" extension so you can easily open it in the browser.
+1. In the OSToy app click on *Persistent Storage* in the left menu.  In the "Filename" area enter a filename for the file you will create (e.g., "test-pv.txt"). Use the ".txt" extension so you can easily open it in the browser.
 
-Underneath that, in the "File contents" box, enter text to be stored in the file. (e.g., "Azure Red Hat OpenShift is the greatest thing since sliced bread!"). Then click "Create file".
+1. Underneath that, in the "File contents" box, enter text to be stored in the file. (e.g., "Azure Red Hat OpenShift is the greatest thing since sliced bread!"). Then click "Create file".
 
-![](../media/Redhat-image16.png)
+   ![](../media/Redhat-image16.png)
 
-You will then see the file you created appear above under "Existing files".  Click on the file and you will see the filename and the contents you entered.
+1. You will then see the file you created appear above under "Existing files".  Click on the file and you will see the filename and the contents you entered.
 
-![](../media/Redhat-image17.png)
+   ![](../media/Redhat-image17.png)
 
-We now want to kill the pod and ensure that the new pod that spins up will be able to see the file we created. Exactly like we did in the previous section. Click on *Home* in the left menu.
+1. We now want to kill the pod and ensure that the new pod that spins up will be able to see the file we created. Exactly like we did in the previous section. Click on *Home* in the left menu.
 
-Click on the "Crash pod" button.  (You can enter a message if you'd like).
+1. Click on the "Crash pod" button.  (You can enter a message if you'd like).
 
-Click on *Persistent Storage* in the left menu.
+1. Click on *Persistent Storage* in the left menu.
 
-You will see the file you created is still there and you can open it to view its contents to confirm.
+1. You will see the file you created is still there and you can open it to view its contents to confirm.
 
-![Crash Message](../media/managedlab/19-ostoy-existingfile.png)
+   ![Crash Message](../media/managedlab/19-ostoy-existingfile.png)
 
-Now let's confirm that it's actually there by using the CLI and checking if it is available to the container.  If you remember we [mounted the directory](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-fe-deployment.yaml#L50) `/var/demo_files` to our PVC.  So get the name of your frontend pod:
+1. Now let's confirm that it's actually there by using the CLI and checking if it is available to the container.  If you remember we [mounted the directory](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-fe-deployment.yaml#L50) `/var/demo_files` to our PVC.  So get the name of your frontend pod:
 
-`oc get pods`
+   ```
+   `oc get pods`
+   ```
 
-then get an SSH session into the container
+1. Then get an SSH session into the container
 
-`oc rsh <pod name>`
+   ```
+   `oc rsh <pod name>`
+   ```
 
-then `cd /var/demo_files`
+1. Then `cd /var/demo_files`
 
-if you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents
+1. If you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents by the following command: 
 
-`cat test-pv.txt`
+   ```
+   `cat test-pv.txt`
+   ```
 
-You should see the text you entered in the UI.
+1. You should see the text you entered in the UI.
+   ```
+   /var/demo_files $ cat test-pv.txt
+   Azure Red Hat OpenShift is the greatest thing since sliced bread!
+   ```
 
-```
-$ oc get pods
-NAME                                  READY     STATUS    RESTARTS   AGE
-ostoy-frontend-5fc8d486dc-wsw24       1/1       Running   0          18m
-ostoy-microservice-6cf764974f-hx4qm   1/1       Running   0          18m
+1. The output will be similar to the following:
 
-$ oc rsh ostoy-frontend-5fc8d486dc-wsw24
+   ```
+   $ oc get pods
+   NAME                                  READY     STATUS    RESTARTS   AGE
+   ostoy-frontend-5fc8d486dc-wsw24       1/1       Running   0          18m
+   ostoy-microservice-6cf764974f-hx4qm   1/1       Running   0          18m
 
-/ $ cd /var/demo_files/
+   $ oc rsh ostoy-frontend-5fc8d486dc-wsw24
 
-/var/demo_files $ ls
-lost+found   test-pv.txt
+   / $ cd /var/demo_files/
 
-/var/demo_files $ cat test-pv.txt
-Azure Red Hat OpenShift is the greatest thing since sliced bread!
-```
+   /var/demo_files $ ls
+   lost+found   test-pv.txt
 
-Then exit the SSH session by typing `exit`. You will then be in your CLI.
+   /var/demo_files $ cat test-pv.txt
+   Azure Red Hat OpenShift is the greatest thing since sliced bread!
+   ```
+
+1. Then exit the SSH session by typing `exit`. You will then be in your CLI.
 
 ## Task 6: Configuration
 
@@ -331,7 +345,9 @@ In this section we'll take a look at how OSToy can be configured using [ConfigMa
 
 ConfigMaps allow you to decouple configuration artifacts from container image content to keep containerized applications portable.
 
-Click on *Config Maps* in the left menu.
+1. In the OSToy app click on *Config Maps* in the left menu.
+
+![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
 This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
 
