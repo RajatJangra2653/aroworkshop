@@ -91,7 +91,11 @@ To learn more, click on the "About" menu item on the left once we deploy the app
 
 ### Create new project
 
-1.  To Create a new project called "OSToy" in your cluster, Use the following command `oc new-project ostoy`
+1.  To Create a new project called "OSToy" in your cluster, Use the following command:
+
+   ```
+   oc new-project ostoy
+   ```
 
 1. You should receive the following response
 
@@ -122,7 +126,7 @@ Feel free to open them up and take a look at what we will be deploying. For simp
 1. In your terminal deploy the microservice using the following command:
 
    ```
-   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml`
+   oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
    ```
 
 1. You should see the following response:
@@ -148,7 +152,7 @@ If you open the *ostoy-frontend-deployment.yaml* you will see we are defining:
 1. Deploy the frontend along with creating all objects mentioned above by entering:
 
    ```
-   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml`
+   oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml
    ```
 
 1. You should see all objects created successfully
@@ -170,7 +174,7 @@ If you open the *ostoy-frontend-deployment.yaml* you will see we are defining:
 1. Get the route so that we can access the application via:
 
    ```
-   `oc get route`
+   oc get route
    ```
  
 1. You should see the following response:
@@ -201,7 +205,7 @@ Assuming you can access the application via the Route provided and are still log
 1. Go to the Azure CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
 
    ```
-   `oc get pods -o name`
+   oc get pods -o name
    ```
 
 1. You should see similar response:
@@ -292,13 +296,13 @@ In this section we will execute a simple example of using persistent storage by 
 1. Now let's confirm that it's actually there by using the CLI and checking if it is available to the container.  If you remember we [mounted the directory](https://github.com/microsoft/aroworkshop/blob/master/yaml/ostoy-fe-deployment.yaml#L50) `/var/demo_files` to our PVC.  So get the name of your frontend pod:
 
    ```
-   `oc get pods`
+   oc get pods
    ```
 
 1. Then get an SSH session into the container
 
    ```
-   `oc rsh <pod name>`
+   oc rsh <pod name>
    ```
 
 1. Then `cd /var/demo_files`
@@ -306,7 +310,7 @@ In this section we will execute a simple example of using persistent storage by 
 1. If you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents by the following command: 
 
    ```
-   `cat test-pv.txt`
+   cat test-pv.txt
    ```
 
 1. You should see the text you entered in the UI.
@@ -453,7 +457,7 @@ If we look at the tile on the left we should see one box randomly changing color
 1. To confirm that we only have one pod running for our microservice, run the following command, or use the web console.
 
    ```
-   `oc get pods`
+   oc get pods
    ```
 
 1. The output will be similar to the following:
