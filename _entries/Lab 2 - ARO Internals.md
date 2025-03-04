@@ -855,80 +855,80 @@ Now we will test this out. Create a new project where we will define a job with 
 
 1. If we check on the machines we should see that 4 are in a “Provisioned” state (there was 1 already existing from before for a total of 5 in this machine set).
 
-```
-$ oc get machines -n openshift-machine-api
-NAME                                 PHASE         TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      7h18m
-ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      7h18m
-ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      7h18m
-ok0620-rq5tl-worker-westus21-7hqgz   Provisioned   Standard_D4s_v3   westus2   1      72s
-ok0620-rq5tl-worker-westus21-7j22r   Provisioned   Standard_D4s_v3   westus2   1      73s
-ok0620-rq5tl-worker-westus21-7n7nf   Provisioned   Standard_D4s_v3   westus2   1      72s
-ok0620-rq5tl-worker-westus21-8m94b   Provisioned   Standard_D4s_v3   westus2   1      73s
-ok0620-rq5tl-worker-westus21-qnlfl   Running       Standard_D4s_v3   westus2   1      13m
-ok0620-rq5tl-worker-westus22-9dtk5   Running       Standard_D4s_v3   westus2   2      22m
-ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      7h15m
-```
+   ```
+   $ oc get machines -n openshift-machine-api
+   NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      7h18m
+   ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      7h18m
+   ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      7h18m
+   ok0620-rq5tl-worker-westus21-7hqgz   Provisioned   Standard_D4s_v3   westus2   1      72s
+   ok0620-rq5tl-worker-westus21-7j22r   Provisioned   Standard_D4s_v3   westus2   1      73s
+   ok0620-rq5tl-worker-westus21-7n7nf   Provisioned   Standard_D4s_v3   westus2   1      72s
+   ok0620-rq5tl-worker-westus21-8m94b   Provisioned   Standard_D4s_v3   westus2   1      73s
+   ok0620-rq5tl-worker-westus21-qnlfl   Running       Standard_D4s_v3   westus2   1      13m
+   ok0620-rq5tl-worker-westus22-9dtk5   Running       Standard_D4s_v3   westus2   2      22m
+   ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      7h15m
+   ```
 
-After a few minutes we should see all 5 are provisioned.
+1. After a few minutes we should see all 5 are provisioned.
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   5         5         5       5           7h23m
-ok0620-rq5tl-worker-westus22   1         1         1       1           7h23m
-ok0620-rq5tl-worker-westus23   1         1         1       1           7h23m
-```
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   5         5         5       5           7h23m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           7h23m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           7h23m
+   ```
 
-If we now wait a few more minutes for the pods to complete, we should see the cluster autoscaler begin scale down the machine set and thus delete machines.
+1. If we now wait a few more minutes for the pods to complete, we should see the cluster autoscaler begin scale down the machine set and thus delete machines.
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   4         4         4       4           7h27m
-ok0620-rq5tl-worker-westus22   1         1         1       1           7h27m
-ok0620-rq5tl-worker-westus23   1         1         1       1           7h27m
-```
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   4         4         4       4           7h27m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           7h27m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           7h27m
+   ```
 
-```
-$ oc get machines -n openshift-machine-api
-NAME                                 PHASE      TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running    Standard_D8s_v3   westus2   1      7h28m
-ok0620-rq5tl-master-1                Running    Standard_D8s_v3   westus2   2      7h28m
-ok0620-rq5tl-master-2                Running    Standard_D8s_v3   westus2   3      7h28m
-ok0620-rq5tl-worker-westus21-7hqgz   Running    Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-7j22r   Running    Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-8m94b   Deleting   Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-qnlfl   Running    Standard_D4s_v3   westus2   1      22m
-ok0620-rq5tl-worker-westus22-9dtk5   Running    Standard_D4s_v3   westus2   2      32m
-ok0620-rq5tl-worker-westus23-hzggb   Running    Standard_D4s_v3   westus2   3      7h24m
-```
+   ```
+   $ oc get machines -n openshift-machine-api
+   NAME                                 PHASE      TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running    Standard_D8s_v3   westus2   1      7h28m
+   ok0620-rq5tl-master-1                Running    Standard_D8s_v3   westus2   2      7h28m
+   ok0620-rq5tl-master-2                Running    Standard_D8s_v3   westus2   3      7h28m
+   ok0620-rq5tl-worker-westus21-7hqgz   Running    Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-7j22r   Running    Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-8m94b   Deleting   Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-qnlfl   Running    Standard_D4s_v3   westus2   1      22m
+   ok0620-rq5tl-worker-westus22-9dtk5   Running    Standard_D4s_v3   westus2   2      32m
+   ok0620-rq5tl-worker-westus23-hzggb   Running    Standard_D4s_v3   westus2   3      7h24m
+   ```
 
-#### Adding node labels
+### Adding node labels
 
 To add a node label it is recommended to set the label in the machine set. While you can directly add a label the node, this is not recommended since nodes could be overwritten and then the label would disappear. Once the machine set is modified to contain the desired label any new machines created from that set would have the newly added labels. This means that existing machines (nodes) will not get the label. Therefore, to make sure all nodes have the label, you should scale the machine set down to zero and then scale the machine set back up.
 
 ##### Using the web console
 
-Select “MachineSets” from the left menu. You will see the list of machinesets.
+1. Select “MachineSets” from the left menu. You will see the list of machinesets.
 
-![](../media/managedlab/3.9-machine-sets-3.png)
+   ![](../media/managedlab/3.9-machine-sets-3.png)
 
-We’ll select the first one “ok0620-rq5tl-worker-westus21”
+1. We’ll select the first one “ok0620-rq5tl-worker-westus21”
 
-Click on the second tab “YAML”
+1. Click on the second tab “YAML”
 
-Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
+1. Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
 
-![](../media/managedlab/3.9-machine-sets-frontend-4.png)
+   ![](../media/managedlab/3.9-machine-sets-frontend-4.png)
 
-The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
+1. The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
 
-Click on the node that was just created.
+1. Click on the node that was just created.
 
-You can see that the label is now there.
+1. You can see that the label is now there.
 
-![](../media/managedlab/3.9-nodes-frontend-5.png)
+   ![](../media/managedlab/3.9-nodes-frontend-5.png)
 
 ## Task 10: Azure Service Operator - Blob Store
 
