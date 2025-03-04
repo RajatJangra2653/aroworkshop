@@ -72,42 +72,38 @@ To learn more, click on the "About" menu item on the left once we deploy the app
 
 ### Retrieve login command
 
-If not logged in via the CLI, click on the dropdown arrow next to your name in the top-right and select *Copy Login Command*.
+1. If not logged in via the CLI, click on the dropdown arrow next to your name in the top-right and select *Copy Login Command*.
 
-![CLI Login](../media/managedlab/7-ostoy-login.png)
+   ![CLI Login](../media/managedlab/7-ostoy-login.png)
 
-A new tab will open click "Display Token"
+1. A new tab will open click "Display Token"
 
-Copy the command under where it says, "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
+1. Copy the command under where it says, "Log in with this token". Then go to your terminal and paste that command and press enter. You will see a similar confirmation message if you successfully logged in.
 
-```
-$ oc login --token=sha256~qWBXdQ_X_4wWZor0XZO00ZZXXXXXXXXXXXX --server=https://api.abcs1234.westus.aroapp.io:6443
-Logged into "https://api.abcd1234.westus.aroapp.io:6443" as "kube:admin" using the token provided.
+   ```
+   $ oc login --token=sha256~qWBXdQ_X_4wWZor0XZO00ZZXXXXXXXXXXXX --server=https://api.abcs1234.westus.aroapp.io:6443
+   Logged into "https://api.abcd1234.westus.aroapp.io:6443" as "kube:admin" using the token provided.
 
-You have access to 67 projects, the list has been suppressed. You can list all projects with 'oc projects'
+   You have access to 67 projects, the list has been suppressed. You can list all projects with 'oc projects'
 
-Using project "default".
-```
+   Using project "default".
+   ```
 
 ### Create new project
 
-Create a new project called "OSToy" in your cluster.
+1.  To Create a new project called "OSToy" in your cluster, Use the following command `oc new-project ostoy`
 
-Use the following command
+1. You should receive the following response
 
-`oc new-project ostoy`
+   ```
+   $ oc new-project ostoy
+   Now using project "ostoy" on server "https://api.abcd1234.westus2.aroapp.io:6443".
+   [...]
+   ```
 
-You should receive the following response
+1. Equivalently you can also create this new project using the web console by selecting *Home > Projects* on the left menu, then clicking on the "Create Project" button on the right.
 
-```
-$ oc new-project ostoy
-Now using project "ostoy" on server "https://api.abcd1234.westus2.aroapp.io:6443".
-[...]
-```
-
-Equivalently you can also create this new project using the web console by selecting *Home > Projects* on the left menu, then clicking on the "Create Project" button on the right.
-
-![UI Create Project](../media/managedlab/6-ostoy-newproj.png)
+   ![UI Create Project](../media/managedlab/6-ostoy-newproj.png)
 
 ### View the YAML deployment objects
 
@@ -121,18 +117,20 @@ Feel free to open them up and take a look at what we will be deploying. For simp
 
 ### Deploy backend microservice
 
-The microservice serves internal web requests and returns a JSON object containing the current hostname and a randomly generated color string.
+1. The microservice serves internal web requests and returns a JSON object containing the current hostname and a randomly generated color string.
 
-In your terminal deploy the microservice using the following command:
+1. In your terminal deploy the microservice using the following command:
 
-`oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml`
+   ```
+   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml`
+   ```
 
-You should see the following response:
-```
-$ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
-deployment.apps/ostoy-microservice created
-service/ostoy-microservice-svc created
-```
+1. You should see the following response:
+   ```
+   $ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
+   deployment.apps/ostoy-microservice created
+   service/ostoy-microservice-svc created
+   ```
 
 ### Deploy the front-end service
 
@@ -147,81 +145,89 @@ If you open the *ostoy-frontend-deployment.yaml* you will see we are defining:
 - Configmaps
 - Secrets
 
-Deploy the frontend along with creating all objects mentioned above by entering:
+1. Deploy the frontend along with creating all objects mentioned above by entering:
 
-`oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml`
+   ```
+   `oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml`
+   ```
 
-You should see all objects created successfully
+1. You should see all objects created successfully
 
-```
-$ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml
-persistentvolumeclaim/ostoy-pvc created
-deployment.apps/ostoy-frontend created
-service/ostoy-frontend-svc created
-route.route.openshift.io/ostoy-route created
-configmap/ostoy-configmap-env created
-secret/ostoy-secret-env created
-configmap/ostoy-configmap-files created
-secret/ostoy-secret created
-```
+   ```
+   $ oc apply -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-frontend-deployment.yaml
+   persistentvolumeclaim/ostoy-pvc created
+   deployment.apps/ostoy-frontend created
+   service/ostoy-frontend-svc created
+   route.route.openshift.io/ostoy-route created
+   configmap/ostoy-configmap-env created
+   secret/ostoy-secret-env created
+   configmap/ostoy-configmap-files created
+   secret/ostoy-secret created
+   ```
 
 ### Get route
 
-Get the route so that we can access the application via:
+1. Get the route so that we can access the application via:
 
- `oc get route`
+   ```
+   `oc get route`
+   ```
  
-You should see the following response:
+1. You should see the following response:
 
-```
-NAME           HOST/PORT                                                      PATH      SERVICES              PORT      TERMINATION   WILDCARD
-ostoy-route   ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io             ostoy-frontend-svc   <all>                   None
-```
+   ```
+   NAME           HOST/PORT                                                      PATH      SERVICES              PORT      TERMINATION   WILDCARD
+   ostoy-route   ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io             ostoy-frontend-svc   <all>                   None
+   ```
 
-Copy `ostoy-route-ostoy.apps.abcd1234.westus2.aroapp.io` above and paste it into your browser (use **http://**) and press enter. You should see the homepage of our application. 
+1. Copy the link under **HOST/PORT** and paste it into your browser (use **http://**) and press enter. You should see the homepage of our application. 
 
-![Home Page](../media/managedlab/10-ostoy-homepage.png)
+   ![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
 ## Task 3: Logging and Metrics
 
 Assuming you can access the application via the Route provided and are still logged into the CLI (please go back to part 2 if you need to do any of those) we'll start to use this application.  As stated earlier, this application will allow you to "push the buttons" of OpenShift and see how it works.  We will do this to test the logs.
 
-Click on the *Home* menu item and then click in the message box for "Log Message (stdout)" and write any message you want to output to the *stdout* stream.  You can try "**All is well!**".  Then click "Send Message".
+1. Click on the *Home* menu item and then click in the message box for "Log Message (stdout)" and write any message you want to output to the *stdout* stream.  You can try "**All is well!**".  Then click "Send Message".
 
-![Logging stdout](../media/managedlab/8-ostoy-stdout.png)
+   ![Logging stdout](../media/managedlab/8-ostoy-stdout.png)
 
-Click in the message box for "Log Message (stderr)" and write any message you want to output to the *stderr* stream. You can try "**Oh no! Error!**".  Then click "Send Message".
+1. Click in the message box for "Log Message (stderr)" and write any message you want to output to the *stderr* stream. You can try "**Oh no! Error!**".  Then click "Send Message".
 
-![Logging stderr](../media/managedlab/9-ostoy-stderr.png)
+   ![Logging stderr](../media/managedlab/9-ostoy-stderr.png)
 
 ### View logs directly from the pod
 
-Go to the CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
+1. Go to the Azure CLI and enter the following command to retrieve the name of your frontend pod which we will use to view the pod logs:
 
-`oc get pods -o name`
+   ```
+   `oc get pods -o name`
+   ```
 
-```
-$ oc get pods -o name
-pod/ostoy-frontend-679cb85695-5cn7x
-pod/ostoy-microservice-86b4c6f559-p594d
-```
+1. You should see similar response:
+   ```
+   $ oc get pods -o name
+   pod/ostoy-frontend-679cb85695-5cn7x
+   pod/ostoy-microservice-86b4c6f559-p594d
+   ```
 
-So, the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
+1. So, the pod name in this case is **ostoy-frontend-679cb85695-5cn7x**.  Then run `oc logs ostoy-frontend-679cb85695-5cn7x` and you should see your messages:
 
-```
-$ oc logs ostoy-frontend-679cb85695-5cn7x
-[...]
-ostoy-frontend-679cb85695-5cn7x: server starting on port 8080
-Redirecting to /home
-stdout: All is well!
-stderr: Oh no! Error!
-```
+1. You should see similar response:
+   ```
+   $ oc logs ostoy-frontend-679cb85695-5cn7x
+   [...]
+   ostoy-frontend-679cb85695-5cn7x: server starting on port 8080
+   Redirecting to /home
+   stdout: All is well!
+   stderr: Oh no! Error!
+   ```
 
-You should see both the *stdout* and *stderr* messages.
+1. You should see both the *stdout* and *stderr* messages.
 
-Try to see them from within the OpenShift Web Console as well. Make sure you are in the "ostoy" project. In the left menu click *Workloads > Pods > \<frontend-pod-name>*.  Then click the "Logs" sub-tab.
+1. Try to see them from within the OpenShift Web Console as well. Make sure you are in the "ostoy" project. In the left menu click *Workloads > Pods > \<frontend-pod-name>*.  Then click the "Logs" sub-tab.
 
-![web-pods](../media/managedlab/9-ostoy-wclogs.png)
+   ![web-pods](../media/managedlab/9-ostoy-wclogs.png)
 
 ## Task 4: Exploring Health Checks
 
