@@ -40,24 +40,28 @@ Once you're done, you'll have an experience similar to the below.
 
 You can log into the cluster using the `kubeadmin` user.  
 
-Run the following command to find the password for the `kubeadmin` user. Replace $CLUSTER_NAME with **ARO<inject key="Deployment ID" enableCopy="false"/>** (your OpenShift cluster name) and $RESOURCE_GROUP_NAME with **openshift** (the resource group name).
+1. Run the following command on **Azure Cloud Shell** to find the password for the `kubeadmin` user. 
+    - Replace $CLUSTER_NAME with **ARO<inject key="Deployment ID" enableCopy="false"/>** (your OpenShift cluster name)
+    - $RESOURCE_GROUP_NAME with **openshift** (the resource group name).
 
-```azurecli-interactive
-az aro list-credentials \
-  --name $CLUSTER_NAME \
-  --resource-group $RESOURCE_GROUP_NAME
-```
+    ```azurecli-interactive
+    az aro list-credentials \
+      --name $CLUSTER_NAME \
+      --resource-group $RESOURCE_GROUP_NAME
+    ```
 
-The following example output shows the password will be in `kubeadminPassword`.
+2. The following example output shows the password will be in `kubeadminPassword`.
 
-```json
-{
-  "kubeadminPassword": "<generated password>",
-  "kubeadminUsername": "kubeadmin"
-}
-```
+    ```json
+    {
+      "kubeadminPassword": "<generated password>",
+      "kubeadminUsername": "kubeadmin"
+    }
+    ```
 
-Save these secrets in a notepad, you are going to use them to connect to the Web Portal.
+    ![](../media/redhatl1.png)
+
+3. **Save** these secrets in a notepad, you are going to use them to connect to the Web Portal.
 
 ## Task 3: Create Project
 
@@ -65,48 +69,53 @@ Save these secrets in a notepad, you are going to use them to connect to the Web
 
 Each Azure Red Hat OpenShift cluster has a public hostname that hosts the OpenShift Web Console.
 
-You can use command `az aro list` to list the clusters in your current Azure subscription.
+1. Use the command `az aro list` to list the clusters in your current Azure subscription.
 
-```sh
-az aro list -o table
-```
+    ```sh
+    az aro list -o table
+    ```
 
-The cluster web console's URL will be listed. Open that link in new browser tab and login with the `kubeadmin` user and password retrieved earlier.
+2. You'll see the cluster web console URL. Open it in a new browser tab, log in with the `kubeadmin` user and the password you retrieved earlier, and click **Log in**.
 
-![](../media/Redhat-image4.png)
+   ![](../media/Redhat-image4.png)
 
-![](../media/Redhat-image5.png)
+   ![](../media/Redhat-image5.png)
 
-After logging in, you should be able to see the Azure Red Hat OpenShift Web Console.
+3. After logging in, you should be able to see the Azure Red Hat OpenShift Web Console.
 
-![Azure Red Hat OpenShift Web Console](../media/openshift-webconsole.png)
+   ![Azure Red Hat OpenShift Web Console](../media/openshift-webconsole.png)
 
 ### Retrieve the login command and token
 
 > **Note** Make sure you complete the [prerequisites](#prereq) to install the OpenShift CLI on the Azure Cloud Shell.
 
-Once you're logged into the Web Console, click on the username on the top right, then click **Copy login command**.
+1. Once you're logged into the Web Console, click on the username **kube:admin** **(1)** on the top right, then click **Copy login command (2)**.
 
-![Copy login command](../media/login-command.png)
+   ![Copy login command](../media/redhatl2.png)
 
-On the following page click on **Display Token** and copy the ```oc login``` line.
+2. On the following page click on **Display Token**.
 
-![Display Token Link](../media/oc-display-token-link.png)
-![Copy Login Token](../media/oc-copy-login-token.png)
+   ![Copy login command](../media/redhatl3.png)
 
-Open the [Azure Cloud Shell](https://shell.azure.com) and paste the login command. You should be able to connect to the cluster.
+3. Now, copy the ```oc login``` line.
 
-![](../media/Redhat-image7.png)
+   ![Copy login command](../media/redhatl4.png)
+
+4. Open the [Azure Cloud Shell](https://shell.azure.com) and paste the login command. You should be able to connect to the cluster.
+
+   ![](../media/Redhat-image7.png)
 
 ### Create a project
 
 A project allows a community of users to organize and manage their content in isolation from other communities.
 
-```sh
-oc new-project workshop
-```
+1. Run the following command in Cloud Shell to create a new project:
 
-![Create new project](../media/lab1-task3-1.png)
+    ```sh
+    oc new-project workshop
+    ```
+
+   ![Create new project](../media/lab1-task3-1.png)
 
 > **Resources**
 
@@ -119,26 +128,30 @@ oc new-project workshop
 
 Azure Red Hat OpenShift allows you to deploy a container image from Docker hub easily and we will deploy a MongoDB database service this way. The mandatory environment variables (user, password, database name etc.) can be passed in the ``oc new-app`` command line
 
-Deploy the MongoDB database:
-```sh
-oc new-app bitnami/mongodb \
-  -e MONGODB_USERNAME=ratingsuser \
-  -e MONGODB_PASSWORD=ratingspassword \
-  -e MONGODB_DATABASE=ratingsdb \
-  -e MONGODB_ROOT_USER=root \
-  -e MONGODB_ROOT_PASSWORD=ratingspassword
-```
+1. Deploy the MongoDB database:
 
-Now head back to the web console and switch to **Developer** settings from the top left corner of your openshift web console.
+    ```sh
+    oc new-app bitnami/mongodb \
+      -e MONGODB_USERNAME=ratingsuser \
+      -e MONGODB_PASSWORD=ratingspassword \
+      -e MONGODB_DATABASE=ratingsdb \
+      -e MONGODB_ROOT_USER=root \
+      -e MONGODB_ROOT_PASSWORD=ratingspassword
+    ```
 
-![Developer settings](../media/developer-settings.png)
+   ![Create new project](../media/redhatl5.png)
 
->**Note:** If you see Welcome to the Developer Perspective!. You can choose **Skip tour**
+2. Now, go back to the web console and switch to **Developer** mode. Click on the three horizontal lines **(☰) (1)** in the top left corner, then select **Administrator (2)**, and finally, click on **Developer (3)**.
 
-Switch to the **workshop** project, you should see a new deployment for mongoDB.
+   ![Developer settings](../media/developer-settings.png)
 
-![](../media/Redhat-image8.png)
+   >**Note:** If you see Welcome to the Developer Perspective!. You can choose **Skip tour**.
 
+   ![Developer settings](../media/redhatl6.png)
+
+1. Switch to the **workshop** project, you should see a new deployment for mongoDB.
+
+   ![](../media/Redhat-image8.png)
 
 ### Verify if the mongoDB pod was created successfully
 
