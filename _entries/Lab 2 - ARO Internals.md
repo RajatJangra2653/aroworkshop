@@ -1065,7 +1065,7 @@ export SERVICE_PRINCIPAL_CLIENT_SECRET={Secret Key}
    azureserviceoperator-controller-manager-5b4bfc59df-lfpqf   2/2     Running   0          24s
    ```
 
-#### Create Storage Accounts and containers using Azure portal
+### Create Storage Accounts and containers using Azure portal
 
 Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
