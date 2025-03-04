@@ -363,7 +363,7 @@ ConfigMaps allow you to decouple configuration artifacts from container image co
 
 Kubernetes Secret objects allow you to store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys. Putting this information in a secret is safer and more flexible than putting it, verbatim, into a pod definition or a container image.
 
-1. Click on *Secrets* in the left menu.
+1. In the OSToy app click on *Secrets* in the left menu.
 
    ![Home Page](../media/managedlab/secrets.png)
 1. This will display the contents of the secrets available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
@@ -382,7 +382,7 @@ Kubernetes Secret objects allow you to store and manage sensitive information, s
 
 Using environment variables is an easy way to change application behavior without requiring code changes. It allows different deployments of the same application to potentially behave differently based on the environment variables, and OpenShift makes it simple to set, view, and update environment variables for Pods/Deployments.
 
-1. Click on *ENV Variables* in the left menu.
+1. In the OSToy app click on *ENV Variables* in the left menu.
 
    ![Home Page](../media/managedlab/env-variables.png)
 1. This will display the environment variables available to the OSToy application.  We added three as defined in the deployment spec of `ostoy-fe-deployment.yaml` here:
