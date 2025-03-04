@@ -477,7 +477,9 @@ If we look at the tile on the left we should see one box randomly changing color
 
 1. Open the file using your favorite editor. Ex: `vi ostoy-microservice-deployment.yaml`.
 
-1. Find the line that states `replicas: 1` and change that to `replicas: 3`. Then save and quit.
+1. Enter insert mode by pressing **i**.
+
+1. Find the line that states `replicas: 1` and change that to `replicas: 3`. Then save and quit using the command **:wq** .
 
 1. It will look like this
 
@@ -492,7 +494,7 @@ If we look at the tile on the left we should see one box randomly changing color
 1. Assuming you are still logged in via the CLI, execute the following command:
 
    ```
-   `oc apply -f ostoy-microservice-deployment.yaml`
+   oc apply -f ostoy-microservice-deployment.yaml
    ```
 
 1. Confirm that there are now 3 pods via the CLI (`oc get pods`) or the web console (*Workloads > Deployments > ostoy-microservice*).
@@ -504,7 +506,7 @@ If we look at the tile on the left we should see one box randomly changing color
 1. Now we will scale the pods down using the command line.  Execute the following command from the CLI:
 
    ```
-   `oc scale deployment ostoy-microservice --replicas=2`
+   oc scale deployment ostoy-microservice --replicas=2
    ```
 
 1. Confirm that there are indeed 2 pods, via the CLI (`oc get pods`) or the web console.
@@ -528,35 +530,41 @@ In more simple words, "if there is a lot of work, make more pods".
 
 We will create a HPA and then use OSToy to generate CPU intensive workloads.  We will then observe how the HPA will scale up the number of pods in order to handle the increased workloads.  
 
-#### 1. Create the Horizontal Pod Autoscaler
+### 1. Create the Horizontal Pod Autoscaler
 
-Run the following command to create the HPA. This will create an HPA that maintains between 1 and 10 replicas of the pods controlled by the *ostoy-microservice* deployment created. Roughly speaking, the HPA will increase and decrease the number of replicas (via the deployment) to maintain an average CPU utilization across all pods of 80% (since each pod requests 50 millicores, this means average CPU usage of 40 millicores).
+1. Run the following command to create the HPA. This will create an HPA that maintains between 1 and 10 replicas of the pods controlled by the *ostoy-microservice* deployment created. Roughly speaking, the HPA will increase and decrease the number of replicas (via the deployment) to maintain an average CPU utilization across all pods of 80% (since each pod requests 50 millicores, this means average CPU usage of 40 millicores).
 
-`oc autoscale deployment/ostoy-microservice --cpu-percent=80 --min=1 --max=10`
+   ```
+   oc autoscale deployment/ostoy-microservice --cpu-percent=80 --min=1 --max=10
+   ```
 
-#### 2. View the current number of pods
+### 2. View the current number of pods
 
-In the OSToy app in the left menu, click on "Autoscaling" to access this portion of the workshop.  
+1. In the OSToy app in the left menu, click on "Autoscaling" to access this portion of the workshop.  
 
-![HPA Menu](../media/managedlab/lab1-task8-2.png)
+   ![HPA Menu](../media/managedlab/lab1-task8-2.png)
 
-As was in the networking section you will see the total number of pods available for the microservice by counting the number of colored boxes.  In this case we have only one.  This can be verified through the web console or from the CLI.
+1. As was in the networking section you will see the total number of pods available for the microservice by counting the number of colored boxes.  In this case we have only one.  This can be verified through the web console or from the CLI.
 
-![HPA Menu](../media/managedlab/lab1-task8-3.png)
+   ![HPA Menu](../media/managedlab/lab1-task8-3.png)
 
-You can use the following command to see the running microservice pods only:
+1. You can use the following command to see the running microservice pods only:
 
-`oc get pods --field-selector=status.phase=Running | grep microservice`
+   ```
+   oc get pods --field-selector=status.phase=Running | grep microservice
+   ```
 
-#### 3. Increase the load
+### 3. Increase the load
 
-Since we now only have one pod, let's increase the workload that the pod needs to perform. Click the link in the center of the card that says "increase the load".  **Please click only *ONCE*!**
+1. Since we now only have one pod, let's increase the workload that the pod needs to perform. Click the link in the center of the card that says **"increase the load"**.  **Please click only *ONCE*!**
 
-This will generate some CPU intensive calculations.  (If you are curious about what it is doing you can click [here](https://github.com/openshift-cs/ostoy/blob/master/microservice/app.js#L32)).
+   ![HPA Menu](../media/managedlab/increase-load.png)
 
-> **Note:** The page may become slightly unresponsive.  This is normal; so be patient while the new pods spin up.
+1. This will generate some CPU intensive calculations.  (If you are curious about what it is doing you can click [here](https://github.com/openshift-cs/ostoy/blob/master/microservice/app.js#L32)).
 
-#### 4. See the pods scale up
+   > **Note:** The page may become slightly unresponsive.  This is normal; so be patient while the new pods spin up.
+
+### 4. See the pods scale up
 
 After about a minute the new pods will show up on the page (represented by the colored rectangles). Confirm that the pods did indeed scale up through the OpenShift Web Console or the CLI (you can use the command above).
 
