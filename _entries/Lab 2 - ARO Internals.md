@@ -672,13 +672,13 @@ There may be times when you need to change aspects of your worker nodes. Things 
 
 1. You will now see that the desired number of machines in the machine set we scaled is “2”.
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   1         1         1       1           73m
-ok0620-rq5tl-worker-westus22   1         1         1       1           73m
-ok0620-rq5tl-worker-westus23   2         2         1       1           73m
-```
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   1         1         1       1           73m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           73m
+   ok0620-rq5tl-worker-westus23   2         2         1       1           73m
+   ```
 
 1. To check the machines in the clusters, run the following command in terminal
 
@@ -722,189 +722,213 @@ The cluster autoscaler adjusts the size of an OpenShift Container Platform clust
 
 A ClusterAutoscaler must have at least 1 machine autoscaler in order for the cluster autoscaler to scale the machines. The cluster autoscaler uses the annotations on machine sets that the machine autoscaler sets to determine the resources that it can scale. If you define a cluster autoscaler without also defining machine autoscalers, the cluster autoscaler will never scale your cluster.
 
-#### Create a Machine Autoscaler
+### Create a Machine Autoscaler
 
 This can be accomplished via the Web Console or through the CLI with a YAML file for the custom resource definition. We’ll use the latter.
 
-Download the sample [MachineAutoscaler resource definition](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/machine-autoscaler.yaml) and open it in your favorite editor.
+1. Download the sample [MachineAutoscaler resource definition](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/machine-autoscaler.yaml) and open it in your favorite editor using the following commands: 
 
-For **metadata.name** give this machine autoscaler a name. Technically, this can be anything you want. But to make it easier to identify which machine set this machine autoscaler affects, specify or include the name of the machine set to scale. The machine set name takes the following form: <clusterid>-<machineset>-<region-az>.
+   ```
+   curl -O https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/machine-autoscaler.yaml
+   vi machine-autoscaler.yaml
+   ```
 
-For **spec.ScaleTargetRef.name** enter the name of the exact MachineSet you want this to apply to. Below is an example of a completed file.
+1. Enter insert mode by pressing **i**. For **metadata.name** give this machine autoscaler a name. Technically, this can be anything you want. But to make it easier to identify which machine set this machine autoscaler affects, specify or include the name of the machine set to scale. The machine set name takes the following form: <clusterid>-<machineset>-<region-az>.
 
-```
-apiVersion: "autoscaling.openshift.io/v1beta1"
-kind: "MachineAutoscaler"
-metadata:
-  name: "ok0620-rq5tl-worker-westus21-autoscaler"
-  namespace: "openshift-machine-api"
-spec:
-  minReplicas: 1
-  maxReplicas: 7
-  scaleTargetRef:
-    apiVersion: machine.openshift.io/v1beta1
-    kind: MachineSet
-    name: ok0620-rq5tl-worker-westus21
-```
+1. For **spec.ScaleTargetRef.name** enter the name of the exact MachineSet you want this to apply to. Below is an example of a completed file.
 
-Save your file.
+   ```
+   apiVersion: "autoscaling.openshift.io/v1beta1"
+   kind: "MachineAutoscaler"
+   metadata:
+   name: "ok0620-rq5tl-worker-westus21-autoscaler"
+   namespace: "openshift-machine-api"
+   spec:
+   minReplicas: 1
+   maxReplicas: 7
+   scaleTargetRef:
+      apiVersion: machine.openshift.io/v1beta1
+      kind: MachineSet
+      name: ok0620-rq5tl-worker-westus21
+   ```
 
-Then create the resource in the cluster. Assuming you kept the same filename:
+1. Save and quit file using the command **:wq** .
 
-`oc create -f machine-autoscaler.yaml`
+1. Then create the resource in the cluster. Assuming you kept the same filename:
 
-```
-$ oc create -f machine-autoscaler.yaml
-machineautoscaler.autoscaling.openshift.io/ok0620-rq5tl-worker-westus21-mautoscaler created
-```
+   ```
+   oc create -f machine-autoscaler.yaml
+   ```
+1. You should see similar response:
+   ```
+   $ oc create -f machine-autoscaler.yaml
+   machineautoscaler.autoscaling.openshift.io/ok0620-rq5tl-worker-westus21-mautoscaler created
+   ```
 
-You can also confirm this by checking the web console under “MachineAutoscalers” or by running:
+1. You can also confirm this by checking the web console under “MachineAutoscalers” or by running:
 
-`oc get machineautoscaler -n openshift-machine-api`
+   ```
+   oc get machineautoscaler -n openshift-machine-api
+   ```
 
-```
-$ oc get machineautoscaler -n openshift-machine-api
-NAME                           REF KIND     REF NAME                      MIN   MAX   AGE
-ok0620-rq5tl-worker-westus21   MachineSet   ok0620-rq5tl-worker-westus2   1     7     40s
-```
+1. You should see similar response:
+   ```
+   $ oc get machineautoscaler -n openshift-machine-api
+   NAME                           REF KIND     REF NAME                      MIN   MAX   AGE
+   ok0620-rq5tl-worker-westus21   MachineSet   ok0620-rq5tl-worker-westus2   1     7     40s
+   ```
 
-#### Create the Cluster Autoscaler
+### Create the Cluster Autoscaler
 
 This is the sample [ClusterAutoscaler resource definition](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml) for this lab.
 
 See the [documentation](https://docs.openshift.com/container-platform/4.16/machine_management/applying-autoscaling.html#cluster-autoscaler-cr_applying-autoscaling) for a detailed explanation of each parameter. You shouldn’t need to edit this file.
 
-Create the resource in the cluster:
+1. Create the resource in the cluster using the following command:
 
-`oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml`
+   ```
+   oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml
+   ```
 
-```
-$ oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml
-clusterautoscaler.autoscaling.openshift.io/default created
-```
+1. You should see similar response:
+   ```
+   $ oc create -f https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/cluster-autoscaler.yaml
+   clusterautoscaler.autoscaling.openshift.io/default created
+   ```
 
-#### Test the Cluster Autoscaler
+### Test the Cluster Autoscaler
 
 Now we will test this out. Create a new project where we will define a job with a load that this cluster cannot handle. This should force the cluster to autoscale to handle the load.
 
-Create a new project called “autoscale-ex”:
+1. Create a new project called “autoscale-ex” using the following command:
 
-`oc new-project autoscale-ex`
+   ```
+   oc new-project autoscale-ex
+   ```
 
-Create the job
+1. Create the job by running the below command:
 
-`oc create -f https://raw.githubusercontent.com/openshift/training/master/assets/job-work-queue.yaml`
+   ```
+   oc create -f https://raw.githubusercontent.com/openshift/training/master/assets/job-work-queue.yaml
+   ```
 
-After a few seconds, run the following to see what pods have been created.
+1. After a few seconds, run the following to see what pods have been created by using the following command:
 
-`oc get pods`
+   ```
+   oc get pods
+   ```
+1. You should see similar response:
+   ```
+   $ oc get pods
+   NAME                     READY   STATUS              RESTARTS   AGE
+   work-queue-28n9m-29qgj   1/1     Running             0          53s
+   work-queue-28n9m-2c9rm   0/1     Pending             0          53s
+   work-queue-28n9m-57vnc   0/1     Pending             0          53s
+   work-queue-28n9m-5gz7t   0/1     Pending             0          53s
+   work-queue-28n9m-5h4jv   0/1     Pending             0          53s
+   work-queue-28n9m-6jz7v   0/1     Pending             0          53s
+   work-queue-28n9m-6ptgh   0/1     Pending             0          53s
+   work-queue-28n9m-78rr9   1/1     Running             0          53s
+   work-queue-28n9m-898wn   0/1     ContainerCreating   0          53s
+   work-queue-28n9m-8wpbt   0/1     Pending             0          53s
+   work-queue-28n9m-9nm78   1/1     Running             0          53s
+   work-queue-28n9m-9ntxc   1/1     Running             0          53s
+   [...]
+   ```
 
-```
-$ oc get pods
-NAME                     READY   STATUS              RESTARTS   AGE
-work-queue-28n9m-29qgj   1/1     Running             0          53s
-work-queue-28n9m-2c9rm   0/1     Pending             0          53s
-work-queue-28n9m-57vnc   0/1     Pending             0          53s
-work-queue-28n9m-5gz7t   0/1     Pending             0          53s
-work-queue-28n9m-5h4jv   0/1     Pending             0          53s
-work-queue-28n9m-6jz7v   0/1     Pending             0          53s
-work-queue-28n9m-6ptgh   0/1     Pending             0          53s
-work-queue-28n9m-78rr9   1/1     Running             0          53s
-work-queue-28n9m-898wn   0/1     ContainerCreating   0          53s
-work-queue-28n9m-8wpbt   0/1     Pending             0          53s
-work-queue-28n9m-9nm78   1/1     Running             0          53s
-work-queue-28n9m-9ntxc   1/1     Running             0          53s
-[...]
-```
+1. We see a lot of pods in a pending state. This should trigger the cluster autoscaler to create more machines using the MachineAutoscaler we created. If we check on the MachineSets using the command:
 
-We see a lot of pods in a pending state. This should trigger the cluster autoscaler to create more machines using the MachineAutoscaler we created. If we check on the MachineSets:
+   ```
+   oc get machinesets -n openshift-machine-api
+   ```
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   5         5         1       1           7h17m
-ok0620-rq5tl-worker-westus22   1         1         1       1           7h17m
-ok0620-rq5tl-worker-westus23   1         1         1       1           7h17m
-```
+1. You should see similar response:
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   5         5         1       1           7h17m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           7h17m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           7h17m
+   ```
 
-We see that the cluster autoscaler has already scaled the machine set up to 5 in our example. Though it is still waiting for those machines to be ready.
+1. We see that the cluster autoscaler has already scaled the machine set up to 5 in our example. Though it is still waiting for those machines to be ready.
 
-If we check on the machines we should see that 4 are in a “Provisioned” state (there was 1 already existing from before for a total of 5 in this machine set).
+1. If we check on the machines we should see that 4 are in a “Provisioned” state (there was 1 already existing from before for a total of 5 in this machine set).
 
-```
-$ oc get machines -n openshift-machine-api
-NAME                                 PHASE         TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      7h18m
-ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      7h18m
-ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      7h18m
-ok0620-rq5tl-worker-westus21-7hqgz   Provisioned   Standard_D4s_v3   westus2   1      72s
-ok0620-rq5tl-worker-westus21-7j22r   Provisioned   Standard_D4s_v3   westus2   1      73s
-ok0620-rq5tl-worker-westus21-7n7nf   Provisioned   Standard_D4s_v3   westus2   1      72s
-ok0620-rq5tl-worker-westus21-8m94b   Provisioned   Standard_D4s_v3   westus2   1      73s
-ok0620-rq5tl-worker-westus21-qnlfl   Running       Standard_D4s_v3   westus2   1      13m
-ok0620-rq5tl-worker-westus22-9dtk5   Running       Standard_D4s_v3   westus2   2      22m
-ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      7h15m
-```
+   ```
+   $ oc get machines -n openshift-machine-api
+   NAME                                 PHASE         TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running       Standard_D8s_v3   westus2   1      7h18m
+   ok0620-rq5tl-master-1                Running       Standard_D8s_v3   westus2   2      7h18m
+   ok0620-rq5tl-master-2                Running       Standard_D8s_v3   westus2   3      7h18m
+   ok0620-rq5tl-worker-westus21-7hqgz   Provisioned   Standard_D4s_v3   westus2   1      72s
+   ok0620-rq5tl-worker-westus21-7j22r   Provisioned   Standard_D4s_v3   westus2   1      73s
+   ok0620-rq5tl-worker-westus21-7n7nf   Provisioned   Standard_D4s_v3   westus2   1      72s
+   ok0620-rq5tl-worker-westus21-8m94b   Provisioned   Standard_D4s_v3   westus2   1      73s
+   ok0620-rq5tl-worker-westus21-qnlfl   Running       Standard_D4s_v3   westus2   1      13m
+   ok0620-rq5tl-worker-westus22-9dtk5   Running       Standard_D4s_v3   westus2   2      22m
+   ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      7h15m
+   ```
 
-After a few minutes we should see all 5 are provisioned.
+1. After a few minutes we should see all 5 are provisioned.
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   5         5         5       5           7h23m
-ok0620-rq5tl-worker-westus22   1         1         1       1           7h23m
-ok0620-rq5tl-worker-westus23   1         1         1       1           7h23m
-```
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   5         5         5       5           7h23m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           7h23m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           7h23m
+   ```
 
-If we now wait a few more minutes for the pods to complete, we should see the cluster autoscaler begin scale down the machine set and thus delete machines.
+1. If we now wait a few more minutes for the pods to complete, we should see the cluster autoscaler begin scale down the machine set and thus delete machines.
 
-```
-$ oc get machinesets -n openshift-machine-api
-NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
-ok0620-rq5tl-worker-westus21   4         4         4       4           7h27m
-ok0620-rq5tl-worker-westus22   1         1         1       1           7h27m
-ok0620-rq5tl-worker-westus23   1         1         1       1           7h27m
-```
+   ```
+   $ oc get machinesets -n openshift-machine-api
+   NAME                           DESIRED   CURRENT   READY   AVAILABLE   AGE
+   ok0620-rq5tl-worker-westus21   4         4         4       4           7h27m
+   ok0620-rq5tl-worker-westus22   1         1         1       1           7h27m
+   ok0620-rq5tl-worker-westus23   1         1         1       1           7h27m
+   ```
 
-```
-$ oc get machines -n openshift-machine-api
-NAME                                 PHASE      TYPE              REGION    ZONE   AGE
-ok0620-rq5tl-master-0                Running    Standard_D8s_v3   westus2   1      7h28m
-ok0620-rq5tl-master-1                Running    Standard_D8s_v3   westus2   2      7h28m
-ok0620-rq5tl-master-2                Running    Standard_D8s_v3   westus2   3      7h28m
-ok0620-rq5tl-worker-westus21-7hqgz   Running    Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-7j22r   Running    Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-8m94b   Deleting   Standard_D4s_v3   westus2   1      10m
-ok0620-rq5tl-worker-westus21-qnlfl   Running    Standard_D4s_v3   westus2   1      22m
-ok0620-rq5tl-worker-westus22-9dtk5   Running    Standard_D4s_v3   westus2   2      32m
-ok0620-rq5tl-worker-westus23-hzggb   Running    Standard_D4s_v3   westus2   3      7h24m
-```
+   ```
+   $ oc get machines -n openshift-machine-api
+   NAME                                 PHASE      TYPE              REGION    ZONE   AGE
+   ok0620-rq5tl-master-0                Running    Standard_D8s_v3   westus2   1      7h28m
+   ok0620-rq5tl-master-1                Running    Standard_D8s_v3   westus2   2      7h28m
+   ok0620-rq5tl-master-2                Running    Standard_D8s_v3   westus2   3      7h28m
+   ok0620-rq5tl-worker-westus21-7hqgz   Running    Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-7j22r   Running    Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-8m94b   Deleting   Standard_D4s_v3   westus2   1      10m
+   ok0620-rq5tl-worker-westus21-qnlfl   Running    Standard_D4s_v3   westus2   1      22m
+   ok0620-rq5tl-worker-westus22-9dtk5   Running    Standard_D4s_v3   westus2   2      32m
+   ok0620-rq5tl-worker-westus23-hzggb   Running    Standard_D4s_v3   westus2   3      7h24m
+   ```
 
-#### Adding node labels
+### Adding node labels
 
 To add a node label it is recommended to set the label in the machine set. While you can directly add a label the node, this is not recommended since nodes could be overwritten and then the label would disappear. Once the machine set is modified to contain the desired label any new machines created from that set would have the newly added labels. This means that existing machines (nodes) will not get the label. Therefore, to make sure all nodes have the label, you should scale the machine set down to zero and then scale the machine set back up.
 
 ##### Using the web console
 
-Select “MachineSets” from the left menu. You will see the list of machinesets.
+1. Select “MachineSets” from the left menu. You will see the list of machinesets.
 
-![](../media/managedlab/3.9-machine-sets-3.png)
+   ![](../media/managedlab/3.9-machine-sets-3.png)
 
-We’ll select the first one “ok0620-rq5tl-worker-westus21”
+1. We’ll select the first one “ok0620-rq5tl-worker-westus21”
 
-Click on the second tab “YAML”
+1. Click on the second tab “YAML”
 
-Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
+1. Click into the YAML and under spec.template.spec.metadata add “labels:” then under that add a key:value pair for the label you want. In our example we can add a label “tier: frontend”. Click Save.
 
-![](../media/managedlab/3.9-machine-sets-frontend-4.png)
+   ![](../media/managedlab/3.9-machine-sets-frontend-4.png)
 
-The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
+1. The already existing machine won’t get this label but any new machines will. So to ensure that all machines get the label, we will scale down this machine set to zero, then once completed we will scale it back up as we did earlier.
 
-Click on the node that was just created.
+1. Click on the node that was just created.
 
-You can see that the label is now there.
+1. You can see that the label is now there.
 
-![](../media/managedlab/3.9-nodes-frontend-5.png)
+   ![](../media/managedlab/3.9-nodes-frontend-5.png)
 
 ## Task 10: Azure Service Operator - Blob Store
 
@@ -1061,7 +1085,7 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
    - Resource group: **ostoy-app01-rg**
    - Region: **<inject key="Region" enableCopy="false"/>**
   
-   ![](../media/managedlab/create-rg.png)
+      ![](../media/managedlab/create-rg.png)
 
 1. In the search bar, search for storage and select **Storage accounts** and **Create** a new storage account.
 
