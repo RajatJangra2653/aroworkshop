@@ -450,16 +450,20 @@ OpenShift allows one to scale up/down the number of pods for each part of an app
 
 If we look at the tile on the left we should see one box randomly changing colors.  This box displays the randomly generated color sent to the frontend by our microservice along with the pod name that sent it. Since we see only one box that means there is only one microservice pod.  We will now scale up our microservice pods and will see the number of boxes change.
 
-To confirm that we only have one pod running for our microservice, run the following command, or use the web console.
+1. To confirm that we only have one pod running for our microservice, run the following command, or use the web console.
 
-`oc get pods`
+   ```
+   `oc get pods`
+   ```
 
-```
-$ oc get pods
-NAME                                   READY     STATUS    RESTARTS   AGE
-ostoy-frontend-679cb85695-5cn7x       1/1       Running   0          1h
-ostoy-microservice-86b4c6f559-p594d   1/1       Running   0          1h
-```
+1. The output will be similar to the following:
+
+   ```
+   $ oc get pods
+   NAME                                   READY     STATUS    RESTARTS   AGE
+   ostoy-frontend-679cb85695-5cn7x       1/1       Running   0          1h
+   ostoy-microservice-86b4c6f559-p594d   1/1       Running   0          1h
+   ```
 
 Let's change our microservice definition yaml to reflect that we want 3 pods instead of the one we see. Download the [ostoy-microservice-deployment.yaml](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml) and save it on your local machine.
 
