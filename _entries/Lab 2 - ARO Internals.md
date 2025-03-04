@@ -304,30 +304,38 @@ In this section we will execute a simple example of using persistent storage by 
 
 1. Then `cd /var/demo_files`
 
-1. If you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents
+1. If you enter `ls` you can see all the files you created.  Next, let's open the file we created and see the contents by the following command: 
 
-`cat test-pv.txt`
+   ```
+   `cat test-pv.txt`
+   ```
 
-You should see the text you entered in the UI.
+1. You should see the text you entered in the UI.
+   ```
+   /var/demo_files $ cat test-pv.txt
+   Azure Red Hat OpenShift is the greatest thing since sliced bread!
+   ```
 
-```
-$ oc get pods
-NAME                                  READY     STATUS    RESTARTS   AGE
-ostoy-frontend-5fc8d486dc-wsw24       1/1       Running   0          18m
-ostoy-microservice-6cf764974f-hx4qm   1/1       Running   0          18m
+1. The output will be similar to the following:
 
-$ oc rsh ostoy-frontend-5fc8d486dc-wsw24
+   ```
+   $ oc get pods
+   NAME                                  READY     STATUS    RESTARTS   AGE
+   ostoy-frontend-5fc8d486dc-wsw24       1/1       Running   0          18m
+   ostoy-microservice-6cf764974f-hx4qm   1/1       Running   0          18m
 
-/ $ cd /var/demo_files/
+   $ oc rsh ostoy-frontend-5fc8d486dc-wsw24
 
-/var/demo_files $ ls
-lost+found   test-pv.txt
+   / $ cd /var/demo_files/
 
-/var/demo_files $ cat test-pv.txt
-Azure Red Hat OpenShift is the greatest thing since sliced bread!
-```
+   /var/demo_files $ ls
+   lost+found   test-pv.txt
 
-Then exit the SSH session by typing `exit`. You will then be in your CLI.
+   /var/demo_files $ cat test-pv.txt
+   Azure Red Hat OpenShift is the greatest thing since sliced bread!
+   ```
+
+1. Then exit the SSH session by typing `exit`. You will then be in your CLI.
 
 ## Task 6: Configuration
 
@@ -337,7 +345,9 @@ In this section we'll take a look at how OSToy can be configured using [ConfigMa
 
 ConfigMaps allow you to decouple configuration artifacts from container image content to keep containerized applications portable.
 
-Click on *Config Maps* in the left menu.
+1. In the OSToy app click on *Config Maps* in the left menu.
+
+![Home Page](../media/managedlab/10-ostoy-homepage.png)
 
 This will display the contents of the configmap available to the OSToy application.  We defined this in the `ostoy-fe-deployment.yaml` here:
 
