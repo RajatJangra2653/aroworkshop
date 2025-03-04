@@ -469,7 +469,11 @@ If we look at the tile on the left we should see one box randomly changing color
    ostoy-microservice-86b4c6f559-p594d   1/1       Running   0          1h
    ```
 
-1. Let's change our microservice definition yaml to reflect that we want 3 pods instead of the one we see. Download the [ostoy-microservice-deployment.yaml](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml) and save it on your local machine.
+1. Let's change our microservice definition yaml to reflect that we want 3 pods instead of the one we see. Download the [ostoy-microservice-deployment.yaml](https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml) file using the following command:
+
+   ```
+   curl -O https://raw.githubusercontent.com/microsoft/aroworkshop/master/yaml/ostoy-microservice-deployment.yaml
+   ```
 
 1. Open the file using your favorite editor. Ex: `vi ostoy-microservice-deployment.yaml`.
 
