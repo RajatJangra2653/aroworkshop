@@ -1085,7 +1085,7 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
    - Resource group: **ostoy-app01-rg**
    - Region: **<inject key="Region" enableCopy="false"/>**
   
-   ![](../media/managedlab/create-rg.png)
+      ![](../media/managedlab/create-rg.png)
 
 1. In the search bar, search for storage and select **Storage accounts** and **Create** a new storage account.
 
