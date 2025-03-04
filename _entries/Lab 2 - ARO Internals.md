@@ -382,27 +382,28 @@ Kubernetes Secret objects allow you to store and manage sensitive information, s
 
 Using environment variables is an easy way to change application behavior without requiring code changes. It allows different deployments of the same application to potentially behave differently based on the environment variables, and OpenShift makes it simple to set, view, and update environment variables for Pods/Deployments.
 
-Click on *ENV Variables* in the left menu.
+1. Click on *ENV Variables* in the left menu.
 
-This will display the environment variables available to the OSToy application.  We added three as defined in the deployment spec of `ostoy-fe-deployment.yaml` here:
+   ![Home Page](../media/managedlab/env-variables.png)
+1. This will display the environment variables available to the OSToy application.  We added three as defined in the deployment spec of `ostoy-fe-deployment.yaml` here:
 
-```
-  env:
-  - name: ENV_TOY_CONFIGMAP
-    valueFrom:
-      configMapKeyRef:
-        name: ostoy-configmap-env
-        key: ENV_TOY_CONFIGMAP
-  - name: ENV_TOY_SECRET
-    valueFrom:
-      secretKeyRef:
-        name: ostoy-secret-env
-        key: ENV_TOY_SECRET
-  - name: MICROSERVICE_NAME
-    value: OSTOY_MICROSERVICE_SVC
-```
+   ```
+   env:
+   - name: ENV_TOY_CONFIGMAP
+      valueFrom:
+         configMapKeyRef:
+         name: ostoy-configmap-env
+         key: ENV_TOY_CONFIGMAP
+   - name: ENV_TOY_SECRET
+      valueFrom:
+         secretKeyRef:
+         name: ostoy-secret-env
+         key: ENV_TOY_SECRET
+   - name: MICROSERVICE_NAME
+      value: OSTOY_MICROSERVICE_SVC
+   ```
 
-The last one, `MICROSERVICE_NAME` is used for the intra-cluster communications between pods for this application.  The application looks for this environment variable to know how to access the microservice in order to get the colors.
+1. The last one, `MICROSERVICE_NAME` is used for the intra-cluster communications between pods for this application.  The application looks for this environment variable to know how to access the microservice in order to get the colors.
 
 ## Task 7: Networking and Scaling
 
