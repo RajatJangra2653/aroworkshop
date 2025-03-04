@@ -700,21 +700,21 @@ ok0620-rq5tl-worker-westus23   2         2         1       1           73m
    ok0620-rq5tl-worker-westus23-hzggb   Running       Standard_D4s_v3   westus2   3      74m
    ```
 
-#### Scale the number of nodes down via the Web Console
+### Scale the number of nodes down via the Web Console
 
-Now let’s scale the cluster back down to a total of 3 worker nodes, but this time, from the web console. (If you need the URL or credentials in order to access it please go back to the relevant portion of Lab 1)
+1. Now let’s scale the cluster back down to a total of 3 worker nodes, but this time, from the web console. (If you need the URL or credentials in order to access it please go back to the relevant portion of Lab 1)
 
-Access your OpenShift web console from the relevant URL. If you need to find the URL you can run:
+1. Access your OpenShift web console from the relevant URL. If you need to find the URL you can run:
 
 `az aro show --name <CLUSTER-NAME> --resource-group <RESOURCEGROUP> --query "consoleProfile.url" -o tsv`
 
-Expand “Compute” in the left menu and then click on “MachineSets”
+1. Expand “Compute” in the left menu and then click on “MachineSets”
 
-![](../media/managedlab/3.9-scale-nodes-1.png)
+   ![](../media/managedlab/3.9-scale-nodes-1.png)
 
-In the main pane you will see the same information about the machine sets from the command line. Now click on the “three dots” at the end of the line for the machine set that you scaled up to “2”. Select “Edit machine count” and decrease it to “1”. Click save.
+1. In the main pane you will see the same information about the machine sets from the command line. Now click on the “three dots” at the end of the line for the machine set that you scaled up to “2”. Select “Edit machine count” and decrease it to “1”. Click save.
 
-![](../media/managedlab/3.9-scale-nodes-2.png)
+   ![](../media/managedlab/3.9-scale-nodes-2.png)
 
 ### Cluster Autoscaling
 
