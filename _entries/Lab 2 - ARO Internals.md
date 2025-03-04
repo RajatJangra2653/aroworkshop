@@ -1128,7 +1128,7 @@ Now we need to create a Storage Account for our Blob Storage, to use with OSToy.
 
 1. The storage account is now set up for use with our application.
 
-#### Install Kubernetes Secret Store CSI
+### Install Kubernetes Secret Store CSI
 
 In this part we will create a Key Vault location to store the connection string to our Storage account. Our application will use this to connect to the Blob Storage container we created, enabling it to display the contents, create new files, as well as display the contents of the files. We will mount this as a secret in a secure volume mount within our application. Our application will then read that to access the Blob storage.
 
@@ -1226,7 +1226,7 @@ In this part we will create a Key Vault location to store the connection string 
 
 <validation step="58614025-40b6-49fa-ac36-a00931c3dae0" />
 
-#### Create a custom Security Context Constraint (SCC)
+### Create a custom Security Context Constraint (SCC)
 
 SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs are a mechanism for controlling the actions and resources that a pod or container can access in an OpenShift cluster. SCCs can be used to enforce security policies at the pod or container level, which helps to improve the overall security of an OpenShift cluster. For more details please see [Managing security context constraints](https://docs.openshift.com/container-platform/4.16/authentication/managing-security-context-constraints.html).
 
@@ -1264,7 +1264,7 @@ SCCs are outside the scope of this workshop. Though, in short, OpenShift SCCs ar
 
    >**Note:** To view the YAML file with comments https://raw.githubusercontent.com/openshift-cs/rosaworkshop/master/rosa-workshop/ostoy/yaml/ostoy-frontend-deployment.yaml
 
-#### See the storage contents through OSToy - READ-ONLY
+### See the storage contents through OSToy - READ-ONLY
 
 After about a minute we can use our app to see the contents of our Blob storage container.
 
@@ -1284,7 +1284,7 @@ After about a minute we can use our app to see the contents of our Blob storage 
 
 1. Move on to the next step to add some files.
 
-#### Create files in your Azure Blob Storage Container - READ-ONLY
+### Create files in your Azure Blob Storage Container - READ-ONLY
 
 For this step we will use OStoy to create a file and upload it to the Blob Storage Container. While Blob Storage can accept any kind of file, for this workshop we’ll use text files so that the contents can easily be rendered in the browser.
 
